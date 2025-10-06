@@ -5,7 +5,7 @@ import { CacheProvider } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
-import { ToastContainer } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
 import rtlPlugin from "@mui/stylis-plugin-rtl";
@@ -40,7 +40,16 @@ const ApplicationProviders = ({ children }: Props) => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           {children}
-          <ToastContainer />
+          <ToastContainer
+            hideProgressBar={true}
+            closeOnClick={true}
+            pauseOnHover={true}
+            draggable={true}
+            theme={"light"}
+            transition={Bounce}
+            position={"top-right"}
+            autoClose={5000}
+          />
           <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
       </QueryClientProvider>
