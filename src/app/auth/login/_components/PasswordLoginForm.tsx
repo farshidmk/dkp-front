@@ -9,10 +9,15 @@ import { Controller, useForm } from "react-hook-form";
 import { LoginFormItems } from "../login-types";
 import { useMutation } from "@tanstack/react-query";
 import { ServerCall } from "@/types/server";
+import ShowErrors from "@/components/errors/ShowErrors";
 
 const PasswordLoginForm = () => {
   const router = useRouter();
-  const { mutate } = useMutation<ServerCall, Error, ServerCall>({});
+  const { mutate, error, data } = useMutation<
+    LoginFormItems,
+    Error,
+    ServerCall
+  >({});
   const {
     control,
     handleSubmit,
@@ -20,21 +25,22 @@ const PasswordLoginForm = () => {
   } = useForm<LoginFormItems>({
     defaultValues: {
       password: "",
-      phoneNumber: "",
+      mobile: "",
     },
   });
-
+  console.log({ error });
   async function onSubmitHandler(data: LoginFormItems) {
     mutate(
       {
         method: "post",
-        url: "/auth/login",
+        url: "auth/login",
         data,
       },
       {
         onSuccess: (res) => {
-          router.push("/user");
+          console.log({ res });
           console.log(res);
+          router.push("/user");
         },
       }
     );
@@ -61,6 +67,7 @@ const PasswordLoginForm = () => {
           }}
         />
       ))}
+      {Boolean(error?.message) && <ShowErrors errors={error!.message!} />}
       <Button
         type="submit"
         fullWidth
@@ -80,7 +87,7 @@ export default PasswordLoginForm;
 
 const PASSWORD_LOGIN_FORM: FormFieldInput<LoginFormItems>[] = [
   {
-    name: "phoneNumber",
+    name: "mobile",
     inputType: "text",
     label: "تلفن همراه",
   },

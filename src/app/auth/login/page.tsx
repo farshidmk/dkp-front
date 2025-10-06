@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, CardContent, Typography } from "@mui/material";
+import { CardContent, Typography } from "@mui/material";
 import Link from "next/link";
 import PasswordLoginForm from "./_components/PasswordLoginForm";
 
@@ -13,11 +13,9 @@ const LoginPage = () => {
       <CardContent>
         <PasswordLoginForm />
 
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 mt-2 gap-2">
-          <Link href={"/auth/sign-up"} className="w-full">
-            <Button variant="outlined" fullWidth color="success">
-              ثبت نام{" "}
-            </Button>
+        <div className="w-full grid text-blue-600 hover:text-blue-800">
+          <Link href={"/auth/sign-up"} className="w-full font-bold text-sm">
+            ثبت نام
           </Link>
         </div>
       </CardContent>

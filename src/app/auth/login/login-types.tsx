@@ -1,7 +1,7 @@
 import { User } from "@/types/user";
 
 export type LoginFormItems = {
-  phoneNumber: string;
+  mobile: string;
   password: string;
 };
 

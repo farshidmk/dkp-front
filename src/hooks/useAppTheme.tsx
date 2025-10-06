@@ -9,11 +9,11 @@ const useAppTheme = () => {
     },
     palette: {
       primary: {
-        main: "#cac572",
+        main: "#636ed8",
         contrastText: "#ffffff",
       },
       secondary: {
-        main: "#ef917c",
+        main: "#49125a",
         contrastText: "#000000",
       },
       background: {

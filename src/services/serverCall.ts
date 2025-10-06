@@ -11,18 +11,19 @@ const api = axios.create({
 });
 
 // Generic server call
-export async function serverCall<T = unknown>(config: ServerCall<T>): Promise<T> {
+export async function serverCall<T = unknown>(
+  config: ServerCall<T>
+): Promise<T> {
   try {
     const response = await api.request<T>({
       ...config,
       url: `${API_URL}/${config.url}`,
       withCredentials: true,
     });
-
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || error.message);
+      throw error.response?.data;
     }
     throw error;
   }

@@ -1,4 +1,5 @@
-import { CircleAlert, RefreshCcw } from "lucide-react";
+import ErrorIcon from "@mui/icons-material/Error";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 type Props = {
   onRefetch: () => void;
@@ -12,7 +13,7 @@ const ErrorHandler: React.FC<Props> = ({
   return (
     <div className="relative rounded-md bg-red-100 border border-red-400 text-red-700 px-6 py-4 mb-4 max-w-xl mx-auto">
       <span className="font-semibold flex items-center gap-1">
-        <CircleAlert />
+        <ErrorIcon />
         خطا:
       </span>
       <span className="block sm:inline ml-1">{errorText}</span>
@@ -23,7 +24,7 @@ const ErrorHandler: React.FC<Props> = ({
         aria-label="Dismiss alert"
       >
         تلاش مجدد
-        <RefreshCcw />
+        <RefreshIcon />
       </button>
     </div>
   );
