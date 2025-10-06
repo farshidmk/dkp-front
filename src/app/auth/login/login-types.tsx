@@ -5,6 +5,7 @@ export type LoginFormItems = {
   password: string;
 };
 
-export type LoginResponse = User & {
+export type LoginResponse = {
   token: string;
+  userInfo: User;
 };

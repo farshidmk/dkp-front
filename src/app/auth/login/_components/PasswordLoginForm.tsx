@@ -6,17 +6,19 @@ import { FormFieldInput } from "@/types/renderFormItem";
 import { Button, CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-import { LoginFormItems } from "../login-types";
+import { LoginFormItems, LoginResponse } from "../login-types";
 import { useMutation } from "@tanstack/react-query";
 import { ServerCall } from "@/types/server";
 import ShowErrors from "@/components/errors/ShowErrors";
+import Cookies from "js-cookie";
+import { UserRole } from "@/types/user";
 
 const PasswordLoginForm = () => {
   const router = useRouter();
-  const { mutate, error, data } = useMutation<
-    LoginFormItems,
+  const { mutate, error } = useMutation<
+    LoginResponse,
     Error,
-    ServerCall
+    ServerCall<LoginFormItems>
   >({});
   const {
     control,
@@ -28,7 +30,6 @@ const PasswordLoginForm = () => {
       mobile: "",
     },
   });
-  console.log({ error });
   async function onSubmitHandler(data: LoginFormItems) {
     mutate(
       {
@@ -38,9 +39,11 @@ const PasswordLoginForm = () => {
       },
       {
         onSuccess: (res) => {
-          console.log({ res });
-          console.log(res);
-          router.push("/user");
+          Cookies.set("token", res.token, { expires: 1 });
+          Cookies.set("userInfo", JSON.stringify(res.userInfo), { expires: 1 });
+          router.push(
+            res.userInfo.role === UserRole.ADMIN ? "/admin" : "/user"
+          );
         },
       }
     );
