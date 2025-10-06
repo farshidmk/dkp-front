@@ -15,7 +15,7 @@ import { UserRole } from "@/types/user";
 
 const PasswordLoginForm = () => {
   const router = useRouter();
-  const { mutate, error } = useMutation<
+  const { mutate, error, isPending } = useMutation<
     LoginResponse,
     Error,
     ServerCall<LoginFormItems>
@@ -23,7 +23,7 @@ const PasswordLoginForm = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormItems>({
     defaultValues: {
       password: "",
@@ -77,8 +77,8 @@ const PasswordLoginForm = () => {
         sx={{ mt: 0.5, mb: 2 }}
         variant="contained"
         color="primary"
-        disabled={isSubmitting}
-        endIcon={isSubmitting ? <CircularProgress /> : <LoginIcon />}
+        disabled={isPending}
+        endIcon={isPending ? <CircularProgress /> : <LoginIcon />}
       >
         ورود
       </Button>
