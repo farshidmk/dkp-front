@@ -1,5 +1,6 @@
 "use client";
 
+import PageName from "@/components/pageName/PageName";
 import DrawerMenu from "@/layout/DrawerMenu";
 import UserNavbarButton from "@/layout/UserNavbarButton";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -45,13 +46,14 @@ const MainAppLayout = ({ children }: Props) => {
                 <span className="text-black"> کیف پول: </span>
                 {(1345345).toLocaleString("fa")} ريال
               </Typography>
+
               <IconButton
                 color="success"
                 sx={{
                   ":hover": {
                     scale: "1.2",
                   },
-                  transition: "all linear 0.3s",
+                  transition: "all linear 0.15s",
                 }}
               >
                 <AddCircleOutlineIcon />
@@ -80,8 +82,9 @@ const MainAppLayout = ({ children }: Props) => {
 
       <DrawerMenu open={openMenu} setOpen={setOpenMenu} />
 
-      <main className="flex-1 overflow-auto bg-gradient-to-r from-blue-200 to-blue-50">
-        {children}
+      <main className="flex-1 overflow-auto bg-gradient-to-r from-blue-200 to-blue-50 flex flex-col p-2">
+        <PageName />
+        <div className="flex-1">{children}</div>
       </main>
     </div>
   );
