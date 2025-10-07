@@ -49,6 +49,7 @@ const ApplicationProviders = ({ children }: Props) => {
             transition={Bounce}
             position={"top-right"}
             autoClose={5000}
+            rtl
           />
           <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>

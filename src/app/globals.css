@@ -28,3 +28,37 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.Toastify__toast {
+  font-family: "Vazirmatn", sans-serif !important; /* Persian friendly font */
+  font-size: 14px !important;
+}
+
+.Toastify__toast svg {
+  fill: white !important; /* icon color */
+}
+
+.Toastify__toast--error {
+  background-color: #dc2626 !important; /* Tailwind red-600 */
+  color: white !important;
+}
+
+.Toastify__toast--success {
+  background-color: #16a34a !important; /* Tailwind green-600 */
+  color: white !important;
+}
+
+.Toastify__toast--info {
+  background-color: #2563eb !important; /* Tailwind blue-600 */
+  color: white !important;
+}
+
+.Toastify__toast--warning {
+  background-color: #d97706 !important; /* Tailwind amber-600 */
+  color: white !important;
+}
+
+.Toastify__toast--default {
+  background-color: #374151 !important; /* Tailwind gray-700 */
+  color: white !important;
+}
