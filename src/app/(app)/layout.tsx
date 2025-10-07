@@ -1,14 +1,12 @@
 "use client";
 
-import { useUserInfo } from "@/hooks/useUserInfo";
 import DrawerMenu from "@/layout/DrawerMenu";
+import UserNavbarButton from "@/layout/UserNavbarButton";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import MenuIcon from "@mui/icons-material/Menu";
-import PersonIcon from "@mui/icons-material/Person";
 import {
   AppBar,
   Box,
-  Button,
   Divider,
   IconButton,
   Toolbar,
@@ -21,16 +19,13 @@ type Props = {
   children: React.ReactNode;
 };
 const MainAppLayout = ({ children }: Props) => {
-  const { firstName, lastName } = useUserInfo();
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
       <AppBar position="static" className="flex-shrink-0" variant="elevation">
         <Toolbar className="flex w-full justify-between items-center ">
           <div className="flex gap-1">
-            <Button color="inherit" startIcon={<PersonIcon />}>
-              {`${firstName} ${lastName}`}
-            </Button>
+            <UserNavbarButton />
             <Divider orientation="vertical" flexItem variant="middle" />
 
             <Box
