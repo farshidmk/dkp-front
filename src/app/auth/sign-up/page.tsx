@@ -55,7 +55,12 @@ const LoginPage = () => {
 
   return (
     <div>
-      <Typography variant="h6" textAlign={"center"} color="primary">
+      <Typography
+        variant="h5"
+        textAlign={"center"}
+        fontWeight={500}
+        color="primary"
+      >
         ثبت نام
       </Typography>
 

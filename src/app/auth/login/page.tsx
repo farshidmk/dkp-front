@@ -7,7 +7,12 @@ import PasswordLoginForm from "./_components/PasswordLoginForm";
 const LoginPage = () => {
   return (
     <div>
-      <Typography variant="h6" textAlign={"center"} color="primary">
+      <Typography
+        variant="h5"
+        textAlign={"center"}
+        fontWeight={500}
+        color="primary"
+      >
         ورود به سایت
       </Typography>
 

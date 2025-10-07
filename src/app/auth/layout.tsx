@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
@@ -6,6 +7,14 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="flex items-center justify-center min-h-screen  p-4">
         <div className="w-full max-w-xl shadow-2xl rounded-3xl">
           <div className="w-full rounded-2xl bg-white/50 backdrop-blur-md backdrop-saturate-125 shadow-xl p-4 border-2 border-primary">
+            <div className="w-full flex justify-center mb-2">
+              <Image
+                alt="دیجی تعمیر"
+                src={"/assets/images/mainlogo.png"}
+                width={130}
+                height={60}
+              />
+            </div>
             {children}
           </div>
         </div>
