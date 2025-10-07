@@ -20,7 +20,7 @@ const UserProfilePage = () => {
 
   return (
     <Container
-      maxWidth="xl"
+      maxWidth="lg"
       className="border p-2 h-full"
       sx={{ borderColor: (t) => t.palette.divider, borderRadius: 2 }}
     >

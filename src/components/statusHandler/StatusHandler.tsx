@@ -1,20 +1,25 @@
 import { QueryStatus } from "@tanstack/react-query";
 import React from "react";
 import ErrorHandler from "../errors/ErrorHandler";
+import { Skeleton } from "@mui/material";
 
 type Props = {
   children: React.ReactNode;
-  status?: QueryStatus;
+  status: QueryStatus;
   refetch?: () => void;
+  skeletonHeight?: number;
 };
 
-const StatusHandler = ({ status, refetch, children }: Props) => {
+const StatusHandler = ({
+  status,
+  refetch,
+  children,
+  skeletonHeight = 100,
+}: Props) => {
   return (
     <>
       {status === "pending" ? (
-        <div className="space-y-4 animate-pulse">
-          <div className="w-full h-8 bg-gray-300 rounded"></div>
-        </div>
+        <Skeleton height={skeletonHeight} />
       ) : status === "error" ? (
         <ErrorHandler onRefetch={refetch!} />
       ) : (

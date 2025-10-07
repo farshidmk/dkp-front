@@ -119,8 +119,7 @@ const LoginPage = () => {
 
 export default LoginPage;
 
-//TODO: complete the fields
-const SIGN_UP_FORM_ITEMS: FormFieldInput<SignUpFormItems>[] = [
+export const SIGN_UP_FORM_ITEMS: FormFieldInput<SignUpFormItems>[] = [
   {
     name: "first_name", // Corresponds to the entity field
     inputType: "text",
