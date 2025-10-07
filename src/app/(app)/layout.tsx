@@ -1,80 +1,93 @@
 "use client";
 
 import { useUserInfo } from "@/hooks/useUserInfo";
+import DrawerMenu from "@/layout/DrawerMenu";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import MenuIcon from "@mui/icons-material/Menu";
+import PersonIcon from "@mui/icons-material/Person";
 import {
   AppBar,
   Box,
   Button,
   Divider,
-  Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
 import React, { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
 
 type Props = {
   children: React.ReactNode;
 };
 const MainAppLayout = ({ children }: Props) => {
-  useUserInfo();
+  const { firstName, lastName } = useUserInfo();
   const [openMenu, setOpenMenu] = useState(false);
   return (
-    <div className="w-screen h-screen">
-      <AppBar position="static">
-        <Toolbar>
+    <div className="fixed inset-0 flex flex-col overflow-hidden">
+      <AppBar position="static" className="flex-shrink-0" variant="elevation">
+        <Toolbar className="flex w-full justify-between items-center ">
+          <div className="flex gap-1">
+            <Button color="inherit" startIcon={<PersonIcon />}>
+              {`${firstName} ${lastName}`}
+            </Button>
+            <Divider orientation="vertical" flexItem variant="middle" />
+
+            <Box
+              component="div"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1,
+                bgcolor: (t) => t.palette.common.white,
+                borderRadius: 4,
+                px: 0.5,
+                py: 0.2,
+              }}
+            >
+              <Typography variant="caption" color="success" fontWeight={500}>
+                <span className="text-black"> کیف پول: </span>
+                {(1345345).toLocaleString("fa")} ريال
+              </Typography>
+              <IconButton
+                color="success"
+                sx={{
+                  ":hover": {
+                    scale: "1.2",
+                  },
+                  transition: "all linear 0.3s",
+                }}
+              >
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </Box>
+          </div>
+          <div className="flex-1" />
+          <Image
+            alt="دیجی تعمیر"
+            src={"/assets/images/mainlogo.png"}
+            width={130}
+            height={60}
+          />
+          <div className="flex-1" />
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
             onClick={() => setOpenMenu(true)}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            دیجی تعمیر
-          </Typography>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
-      <Drawer open={openMenu} onClose={() => setOpenMenu(false)}>
-        <Box sx={{ width: "100%", maxWidth: "300px" }} role="presentation">
-          <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <MenuIcon /> : <MenuIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <MenuIcon /> : <MenuIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
-      <main className="w-full h-full">{children}</main>
+
+      <DrawerMenu open={openMenu} setOpen={setOpenMenu} />
+
+      <main className="flex-1 overflow-auto bg-gradient-to-r from-blue-200 to-blue-50">
+        {children}
+      </main>
     </div>
   );
 };
