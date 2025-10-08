@@ -26,6 +26,7 @@ export default function ChangePasswordForm() {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ChangePasswordFormData>({
     resolver: zodResolver(ChangePasswordValidation),
     defaultValues: {
@@ -44,6 +45,7 @@ export default function ChangePasswordForm() {
       },
       {
         onSuccess: () => {
+          reset();
           toast.success("رمز عبور با موفقیت تغییر کرد");
         },
         onError: () => {

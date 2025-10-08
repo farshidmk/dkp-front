@@ -3,7 +3,7 @@
 import RenderFormItem from "@/components/formItems/RenderFormItem";
 import LoginIcon from "@mui/icons-material/Login";
 import { FormFieldInput } from "@/types/renderFormItem";
-import { Button, CircularProgress } from "@mui/material";
+import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { LoginFormItems, LoginResponse } from "../login-types";
@@ -77,8 +77,8 @@ const PasswordLoginForm = () => {
         sx={{ mt: 0.5, mb: 2 }}
         variant="contained"
         color="primary"
-        disabled={isPending}
-        endIcon={isPending ? <CircularProgress /> : <LoginIcon />}
+        loading={isPending}
+        endIcon={<LoginIcon />}
       >
         ورود
       </Button>
