@@ -28,7 +28,7 @@ const DrawerMenu = ({ open, setOpen }: Props) => {
   const { role } = useUserInfo();
   const isAdmin = role === UserRole.ADMIN;
   return (
-    <Drawer open={open} onClose={() => setOpen(false)} anchor="right">
+    <Drawer open={open} onClose={() => setOpen(false)} anchor="left">
       <Box sx={{ width: "100%", maxWidth: "400px" }} role="presentation">
         <Paper
           sx={{
@@ -39,16 +39,15 @@ const DrawerMenu = ({ open, setOpen }: Props) => {
             justifyContent: "space-between",
           }}
         >
-          <IconButton onClick={() => setOpen(false)} color="secondary">
-            <CloseIcon />
-          </IconButton>
-
           <Image
             alt="دیجی تعمیر"
             src={"/assets/images/mainlogo.png"}
             width={100}
             height={40}
           />
+          <IconButton onClick={() => setOpen(false)} color="secondary">
+            <CloseIcon />
+          </IconButton>
         </Paper>
 
         {isAdmin && (

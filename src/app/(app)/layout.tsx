@@ -25,10 +25,24 @@ const MainAppLayout = ({ children }: Props) => {
     <div className="fixed inset-0 flex flex-col overflow-hidden">
       <AppBar position="static" className="flex-shrink-0" variant="elevation">
         <Toolbar className="flex w-full justify-between items-center ">
-          <div className="flex gap-1">
-            <UserNavbarButton />
-            <Divider orientation="vertical" flexItem variant="middle" />
-
+          <div className="flex-1 flex justify-start">
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={() => setOpenMenu(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+          </div>
+          <Image
+            alt="دیجی تعمیر"
+            src={"/assets/images/mainlogo.png"}
+            width={130}
+            height={60}
+          />
+          <div className="flex gap-1 flex-1 justify-end">
             <Box
               component="div"
               sx={{
@@ -59,24 +73,9 @@ const MainAppLayout = ({ children }: Props) => {
                 <AddCircleOutlineIcon />
               </IconButton>
             </Box>
+            <Divider orientation="vertical" flexItem variant="middle" />
+            <UserNavbarButton />
           </div>
-          <div className="flex-1" />
-          <Image
-            alt="دیجی تعمیر"
-            src={"/assets/images/mainlogo.png"}
-            width={130}
-            height={60}
-          />
-          <div className="flex-1" />
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setOpenMenu(true)}
-          >
-            <MenuIcon />
-          </IconButton>
         </Toolbar>
       </AppBar>
 
