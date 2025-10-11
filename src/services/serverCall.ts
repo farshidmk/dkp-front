@@ -23,6 +23,9 @@ export async function serverCall<T = unknown>(
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      if (error.status === 401) {
+        window.location.href = "/auth/login";
+      }
       throw error.response?.data;
     }
     throw error;
