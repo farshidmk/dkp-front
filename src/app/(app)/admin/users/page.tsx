@@ -1,114 +1,110 @@
 "use client";
 
 import StatusHandler from "@/components/statusHandler/StatusHandler";
-import { UserInfo } from "@/types/user";
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import { User, UserInfo } from "@/types/user";
+import EditIcon from "@mui/icons-material/Edit";
 import {
+  Chip,
+  Container,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  IconButton,
   Tooltip,
-  Chip,
-  Container,
 } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import EditIcon from "@mui/icons-material/Edit";
-import CancelIcon from "@mui/icons-material/Cancel";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import { useQuery } from "@tanstack/react-query";
+import ApproveButton from "./_components/ApproveButton";
+import { useState } from "react";
+import EditUserProfile from "./_components/EditUserProfile";
 
 const UsersPage = () => {
+  const [selectedUserId, setSelectedUserId] = useState<User["id"] | undefined>(
+    undefined
+  );
   const { data, status, refetch } = useQuery<UserInfo[], Error, UserInfo[]>({
     queryKey: ["users"],
   });
 
-  function onApprove(id: number) {}
-  function onEdit(id: number) {}
-
   return (
-    <div className="flex-1 overflow-auto h-full flex flex-col">
-      <StatusHandler status={status} refetch={refetch}>
-        <Container maxWidth="xl" className="flex-1 overflow-auto">
-          <TableContainer component={Paper} sx={{ mt: 3 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>شماره</TableCell>
-                  <TableCell align="center">نام</TableCell>
-                  <TableCell align="center">موبایل</TableCell>
-                  <TableCell align="center">شهر</TableCell>
-                  <TableCell align="center">وضعیت</TableCell>
-                  <TableCell align="center">تاریخ ثبت نام</TableCell>
-                  <TableCell align="center">عملیات</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.map((user, index) => (
-                  <TableRow key={user.id} hover>
-                    <TableCell>{(index + 1).toLocaleString("fa")}</TableCell>
-                    <TableCell align="center">
-                      {user.profile.first_name} {user.profile.last_name}
-                    </TableCell>
-                    <TableCell align="center">{user.mobile}</TableCell>
-                    <TableCell align="center">{user.profile.city}</TableCell>
-                    <TableCell align="center">
-                      <Tooltip
-                        title={user.approved ? "تایید شده" : "منتظر تایید"}
-                      >
-                        {user.approved ? (
-                          <Chip
-                            label="تایید شده"
-                            color="success"
-                            size="small"
-                          />
-                        ) : (
-                          <Chip
-                            label="منتظر تایید"
-                            color="warning"
-                            size="small"
-                          />
-                        )}
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell align="center">
-                      {new Date(user.created_at).toLocaleString("fa")}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Tooltip title={user.approved ? "عدم تایید" : "تایید"}>
-                        <IconButton
-                          color={user.approved ? "error" : "success"}
-                          onClick={() => onApprove(user.id)}
+    <>
+      <EditUserProfile
+        handleClose={() => setSelectedUserId(undefined)}
+        userId={selectedUserId}
+      />
+      <div className="flex-1 overflow-auto h-full flex flex-col">
+        <StatusHandler status={status} refetch={refetch}>
+          <Container maxWidth="xl" className="flex-1 overflow-auto">
+            <TableContainer component={Paper} sx={{ mt: 3 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>شماره</TableCell>
+                    <TableCell align="center">نام</TableCell>
+                    <TableCell align="center">موبایل</TableCell>
+                    <TableCell align="center">شهر</TableCell>
+                    <TableCell align="center">وضعیت</TableCell>
+                    <TableCell align="center">تاریخ ثبت نام</TableCell>
+                    <TableCell align="center">عملیات</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.map((user, index) => (
+                    <TableRow key={user.id} hover>
+                      <TableCell>{(index + 1).toLocaleString("fa")}</TableCell>
+                      <TableCell align="center">
+                        {user.profile.first_name} {user.profile.last_name}
+                      </TableCell>
+                      <TableCell align="center">{user.mobile}</TableCell>
+                      <TableCell align="center">{user.profile.city}</TableCell>
+                      <TableCell align="center">
+                        <Tooltip
+                          title={user.approved ? "تایید شده" : "منتظر تایید"}
                         >
                           {user.approved ? (
-                            <PersonRemoveIcon />
+                            <Chip
+                              label="تایید شده"
+                              color="success"
+                              size="small"
+                            />
                           ) : (
-                            <PersonAddIcon />
+                            <Chip
+                              label="منتظر تایید"
+                              color="warning"
+                              size="small"
+                            />
                           )}
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="ویرایش">
-                        <IconButton
-                          color="primary"
-                          onClick={() => onEdit(user.id)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Container>
-      </StatusHandler>
-    </div>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell align="center">
+                        {new Date(user.created_at).toLocaleString("fa")}
+                      </TableCell>
+                      <TableCell align="center">
+                        <ApproveButton
+                          isApproved={user.approved}
+                          userId={user.id}
+                        />
+                        <Tooltip title="ویرایش">
+                          <IconButton
+                            color="primary"
+                            onClick={() => setSelectedUserId(user.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Container>
+        </StatusHandler>
+      </div>
+    </>
   );
 };
 

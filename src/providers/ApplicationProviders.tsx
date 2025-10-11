@@ -20,6 +20,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       queryFn: getRequest(),
+      refetchOnWindowFocus: false,
     },
     mutations: {
       mutationFn: mutationRequest(),
