@@ -3,6 +3,7 @@
 import PageName from "@/components/pageName/PageName";
 import DrawerMenu from "@/layout/DrawerMenu";
 import UserNavbarButton from "@/layout/UserNavbarButton";
+import { useWalletBalance } from "@/hooks/useWalletBalance";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -12,15 +13,24 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  Skeleton,
 } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
 
 type Props = {
   children: React.ReactNode;
 };
 const MainAppLayout = ({ children }: Props) => {
   const [openMenu, setOpenMenu] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const { data: balance, isLoading: isBalanceLoading } = useWalletBalance();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
       <AppBar position="static" className="flex-shrink-0" variant="elevation">
@@ -56,22 +66,28 @@ const MainAppLayout = ({ children }: Props) => {
                 py: 0.2,
               }}
             >
-              <Typography variant="caption" color="success" fontWeight={500}>
-                <span className="text-black"> کیف پول: </span>
-                {(1345345).toLocaleString("fa")} ريال
-              </Typography>
+              {isBalanceLoading ? (
+                <Skeleton variant="text" width={100} height={20} />
+              ) : (
+                <Typography variant="caption" color="success" fontWeight={500}>
+                  <span className="text-black"> کیف پول: </span>
+                  {isClient && balance?.balance ? balance.balance.toLocaleString("fa") : "0"} ريال
+                </Typography>
+              )}
 
-              <IconButton
-                color="success"
-                sx={{
-                  ":hover": {
-                    scale: "1.2",
-                  },
-                  transition: "all linear 0.15s",
-                }}
-              >
-                <AddCircleOutlineIcon />
-              </IconButton>
+              <Link href="/user/wallet">
+                <IconButton
+                  color="success"
+                  sx={{
+                    ":hover": {
+                      scale: "1.2",
+                    },
+                    transition: "all linear 0.15s",
+                  }}
+                >
+                  <AddCircleOutlineIcon />
+                </IconButton>
+              </Link>
             </Box>
             <Divider orientation="vertical" flexItem variant="middle" />
             <UserNavbarButton />
