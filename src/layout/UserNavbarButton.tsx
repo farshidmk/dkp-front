@@ -47,13 +47,16 @@ const UserNavbarButton = () => {
   return (
     <>
       <div
-        className="flex items-center gap-2 border py-1 px-2 rounded-lg hover:bg-black/10 cursor-pointer transition-colors  bg-white/10 max-w-48 min-w-32"
+        className="flex items-center gap-2 border py-1 px-2 rounded-lg hover:bg-black/10 cursor-pointer transition-colors  bg-white/10  min-w-32"
         onClick={(e) => handleClick(e)}
       >
         <AccountCircleIcon />
 
         <div className="flex flex-col gap-0 ">
-          <Typography variant="body1">{`${firstName} ${lastName}`}</Typography>
+          <Typography
+            variant="body1"
+            fontSize={12}
+          >{`${firstName} ${lastName}`}</Typography>
           {status === "pending" ? (
             <LinearProgress />
           ) : status === "error" ? (
@@ -61,7 +64,7 @@ const UserNavbarButton = () => {
               <RefreshIcon />
             </IconButton>
           ) : (
-            <Typography variant="body2" fontSize={10}>
+            <Typography variant="body2" fontSize={10} fontWeight={500}>
               موجودی{`: ${Number(data.balance).toLocaleString("fa")} ريال`}
             </Typography>
           )}
