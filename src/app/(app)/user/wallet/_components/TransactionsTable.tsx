@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, Typography, Chip } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   DataGrid,
@@ -10,8 +9,8 @@ import {
   GridPaginationModel,
 } from "@mui/x-data-grid";
 
-import { TransactionStatus, GetTransactionsResponse } from "@/types/wallet";
-import { getRequest } from "@/services/serverCall";
+import { TransactionStatus } from "@/types/wallet";
+import { useWalletTransactions } from "@/hooks/useWalletTransactions";
 
 const TransactionsTable = () => {
   const [paginationModel, setPaginationModel] = useState({
@@ -19,15 +18,10 @@ const TransactionsTable = () => {
     pageSize: 10,
   });
 
-  const { data, status, refetch } = useQuery<GetTransactionsResponse>({
-    queryKey: [
-      "wallets",
-      "transactions",
-      paginationModel.page,
-      paginationModel.pageSize,
-    ],
-    queryFn: getRequest(),
-  });
+  const { data, status, refetch } = useWalletTransactions(
+    paginationModel.page,
+    paginationModel.pageSize
+  );
 
   const getStatusColor = (status: TransactionStatus) => {
     switch (status) {

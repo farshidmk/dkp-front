@@ -4,7 +4,6 @@ import { Container, Grid } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
-import StatusHandler from "@/components/statusHandler/StatusHandler";
 import WalletBalanceCard from "./_components/WalletBalanceCard";
 import TransactionsTable from "./_components/TransactionsTable";
 import TransactionForm from "./_components/TransactionForm";
@@ -26,9 +25,9 @@ const UserWallet = () => {
       <Grid container spacing={3}>
         {/* Balance Card */}
         <Grid size={{ xs: 12, md: 4 }}>
-          <WalletBalanceCard 
-            balance={balance} 
-            isLoading={balanceStatus === "pending"} 
+          <WalletBalanceCard
+            balance={balance}
+            isLoading={balanceStatus === "pending"}
           />
         </Grid>
 
