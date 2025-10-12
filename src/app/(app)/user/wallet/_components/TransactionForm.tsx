@@ -54,6 +54,8 @@ const TransactionForm = () => {
         url: "wallets/transactions",
         data: {
           ...data,
+          amount: Number(data.amount), // Convert string to number
+          order_id: Number(data.order_id), // Convert string to number
           idempotency_key: crypto.randomUUID(),
         },
       };
@@ -123,7 +125,6 @@ const TransactionForm = () => {
                     type="number"
                     error={Boolean(errors.amount)}
                     helperText={errors.amount?.message}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
                   />
                 )}
               />
