@@ -38,7 +38,7 @@ const TransactionForm = () => {
     defaultValues: {
       type: TransactionType.CHARGE,
       amount: 0,
-      order_id: "",
+      order_id: 0,
       description: "",
     },
   });
@@ -59,7 +59,7 @@ const TransactionForm = () => {
       toast.success("تراکنش با موفقیت ثبت شد");
       reset();
       queryClient.invalidateQueries({ queryKey: ["wallets", "transactions"] });
-      queryClient.invalidateQueries({ queryKey: ["wallets", "balance"] });
+      queryClient.invalidateQueries({ queryKey: ["wallets", "me"] });
     },
     onError: (error: any) => {
       toast.error(error?.message || "خطا در ثبت تراکنش");
@@ -132,6 +132,7 @@ const TransactionForm = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    type="number"
                     fullWidth
                     label="کد پیگیری"
                     error={Boolean(errors.order_id)}

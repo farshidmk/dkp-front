@@ -10,8 +10,10 @@ export enum TransactionStatus {
 }
 
 export type WalletBalance = {
-  balance: number;
-  currency: string;
+  id: number;
+  user_id: number;
+  balance: string;
+  created_at: string;
   updated_at: string;
 };
 
@@ -19,7 +21,7 @@ export type Transaction = {
   id: number;
   type: TransactionType;
   amount: number;
-  order_id: string;
+  order_id: number;
   idempotency_key: string;
   description?: string;
   status: TransactionStatus;
@@ -33,7 +35,7 @@ export type Transaction = {
 export type CreateTransactionRequest = {
   type: TransactionType;
   amount: number;
-  order_id: string;
+  order_id: number;
   idempotency_key?: string;
   description?: string;
 };
