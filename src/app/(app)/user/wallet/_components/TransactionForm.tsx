@@ -50,6 +50,7 @@ const TransactionForm = () => {
         url: "wallets/transactions",
         data: {
           ...data,
+          order_id: Number(data.order_id), // Convert string to number
           idempotency_key: crypto.randomUUID(),
         },
       };
