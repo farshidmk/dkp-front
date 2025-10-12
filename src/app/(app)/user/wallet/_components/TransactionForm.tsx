@@ -23,6 +23,10 @@ import { CreateTransactionRequest, TransactionType } from "@/types/wallet";
 import { WalletFormValidation } from "../wallet.validation";
 import { serverCall } from "@/services/serverCall";
 import { ServerCall } from "@/types/server";
+import { z } from "zod";
+
+// Type for the form data after validation transformation
+type WalletFormData = z.infer<typeof WalletFormValidation>;
 
 const TransactionForm = () => {
   const queryClient = useQueryClient();
@@ -33,24 +37,23 @@ const TransactionForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CreateTransactionRequest>({
+  } = useForm<WalletFormData>({
     resolver: zodResolver(WalletFormValidation),
     defaultValues: {
       type: TransactionType.CHARGE,
-      amount: 0,
-      order_id: 0,
+      amount: "",
+      order_id: "",
       description: "",
     },
   });
 
   const { mutate } = useMutation({
-    mutationFn: async (data: CreateTransactionRequest) => {
+    mutationFn: async (data: WalletFormData) => {
       const config: ServerCall = {
         method: "POST",
         url: "wallets/transactions",
         data: {
           ...data,
-          order_id: Number(data.order_id), // Convert string to number
           idempotency_key: crypto.randomUUID(),
         },
       };
@@ -67,7 +70,7 @@ const TransactionForm = () => {
     },
   });
 
-  const onSubmit = async (data: CreateTransactionRequest) => {
+  const onSubmit = async (data: WalletFormData) => {
     setIsSubmitting(true);
     try {
       mutate(data);
