@@ -21,12 +21,16 @@ const OrderItem = ({ index }: Props) => {
     undefined
   );
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const { control } = useFormContext<Order>();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<Order>();
   const { fields, update, remove } = useFieldArray({
     control,
     name: "items",
   });
   const item = fields?.[index];
+  const error = errors.items?.[index];
 
   async function getItem(dkpCode: string) {
     if (dkpCode.length < 4) return false;
@@ -52,6 +56,9 @@ const OrderItem = ({ index }: Props) => {
       console.log("error: ", e);
     }
   }
+
+  if (!item) return null;
+
   return (
     <>
       <DkpErrorModal
@@ -90,7 +97,8 @@ const OrderItem = ({ index }: Props) => {
             value={item.dkp}
             onBlur={(e) => getItem(e.target.value)}
             fullWidth
-            helperText={`${"\u00A0"}`}
+            error={Boolean(error?.dkp?.message)}
+            helperText={error?.dkp?.message || `${"\u00A0"}`}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 2 }}>
@@ -100,7 +108,8 @@ const OrderItem = ({ index }: Props) => {
             value={item.serial}
             placeholder="سریال دستگاه"
             fullWidth
-            helperText={`${"\u00A0"}`}
+            error={Boolean(error?.serial?.message)}
+            helperText={error?.serial?.message || `${"\u00A0"}`}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 2.5 }}>
@@ -111,7 +120,8 @@ const OrderItem = ({ index }: Props) => {
             disabled
             fullWidth
             variant="filled"
-            helperText={`${"\u00A0"}`}
+            error={Boolean(error?.title?.message)}
+            helperText={error?.title?.message || `${"\u00A0"}`}
           />
         </Grid>
 
@@ -125,7 +135,8 @@ const OrderItem = ({ index }: Props) => {
             disabled
             fullWidth
             variant="filled"
-            helperText={`${"\u00A0"}`}
+            error={Boolean(error?.unit_price?.message)}
+            helperText={error?.unit_price?.message || `${"\u00A0"}`}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 1.5 }}>
@@ -134,7 +145,8 @@ const OrderItem = ({ index }: Props) => {
             value={item.warranty}
             disabled
             fullWidth
-            helperText={`${"\u00A0"}`}
+            error={Boolean(error?.warranty?.message)}
+            helperText={error?.warranty?.message || `${"\u00A0"}`}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 1 }}>
@@ -146,13 +158,8 @@ const OrderItem = ({ index }: Props) => {
             value={item.serial}
             placeholder="تعداد"
             type="number"
-            helperText={
-              digikalaItem?.data?.product?.price?.order_limit
-                ? `حداکثر سفارش ${digikalaItem?.data.product.price.order_limit.toLocaleString(
-                    "fa"
-                  )}`
-                : `${"\u00A0"}`
-            }
+            error={Boolean(error?.quantity?.message)}
+            helperText={error?.quantity?.message || `${"\u00A0"}`}
             fullWidth
           />
         </Grid>
