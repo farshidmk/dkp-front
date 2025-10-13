@@ -33,7 +33,7 @@ const WalletBalanceCard = ({ balance, isLoading }: WalletBalanceCardProps) => {
             <Skeleton variant="text" width="60%" height={60} />
           ) : (
             <Typography variant="h3" fontWeight="bold">
-              {balance?.balance?.toLocaleString("fa") || "0"}
+              {balance?.balance ? parseFloat(balance.balance).toLocaleString("fa") : "0"}
             </Typography>
           )}
           <Typography variant="body1" sx={{ opacity: 0.9 }}>

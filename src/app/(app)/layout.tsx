@@ -74,7 +74,7 @@ const MainAppLayout = ({ children }: Props) => {
               ) : (
                 <Typography variant="caption" color="success" fontWeight={500}>
                   <span className="text-black"> کیف پول: </span>
-                  {isClient && balance?.balance ? balance.balance.toLocaleString("fa") : "0"} ريال
+                  {isClient && balance?.balance ? parseFloat(balance.balance).toLocaleString("fa") : "0"} ريال
                 </Typography>
               )}
 
