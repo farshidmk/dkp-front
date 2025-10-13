@@ -5,6 +5,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 type MenuType = {
   title: string;
@@ -25,8 +26,8 @@ export const USER_MENU: MenuType[] = [
 export const ADMIN_MENU: MenuType[] = [
   { title: "کاربران", icon: <GroupIcon />, path: "/admin/users" },
   {
-    title: "تراکنش ها",
-    icon: <PriceChangeIcon />,
-    path: "/admin/transactions",
+    title: "مدیریت تراکنش‌ها",
+    icon: <PendingActionsIcon />,
+    path: "/admin/pending-transactions",
   },
 ];

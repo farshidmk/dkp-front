@@ -1,30 +1,40 @@
 "use client";
 
-import React, { useState } from "react";
-import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
+import { Container, Typography, Box } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { getRequest } from "@/services/serverCall";
-import StatusHandler from "@/components/statusHandler/StatusHandler";
-import ApproveTransactionButton from "./_components/ApproveTransactionButton";
-import { Transaction, TransactionStatus } from "@/types/wallet";
-import {
-  DataGrid,
-  GridColDef,
-  GridToolbar,
-  GridFilterModel,
-  GridPaginationModel,
-} from "@mui/x-data-grid";
+import React, { useState } from "react";
 
-const AdminTransactionsPage = () => {
-  const [filterStatus, setFilterStatus] = useState<string>("all");
+import StatusHandler from "@/components/statusHandler/StatusHandler";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import TransactionActions from "./_components/TransactionActions";
+import { Transaction, TransactionStatus } from "@/types/wallet";
+import { serverCall } from "@/services/serverCall";
+
+const AdminPendingTransactionsPage = () => {
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
-    pageSize: 20,
+    pageSize: 10,
   });
 
-  const { data, status, refetch } = useQuery<{ data: Transaction[]; total: number; page: number; limit: number }>({
-    queryKey: ["admin", "transactions", paginationModel.page, paginationModel.pageSize, filterStatus],
-    queryFn: getRequest(),
+  const { data, status, refetch } = useQuery<{
+    data: Transaction[];
+    total: number;
+    page: number;
+    limit: number;
+  }>({
+    queryKey: [
+      "wallets",
+      "transactions",
+      "admin",
+      "pending",
+      paginationModel.page,
+      paginationModel.pageSize,
+    ],
+    queryFn: async () =>
+      await serverCall({
+        method: "GET",
+        url: `wallets/transactions/admin/pending?page=${paginationModel.page}&limit=${paginationModel.pageSize}`,
+      }),
   });
 
   const getStatusColor = (status: TransactionStatus) => {
@@ -67,8 +77,14 @@ const AdminTransactionsPage = () => {
 
   const columns: GridColDef[] = [
     {
+      field: "id",
+      headerName: "شناسه",
+      width: 100,
+      renderCell: (params) => `#${params.value}`,
+    },
+    {
       field: "user_info",
-      headerName: "اطلاعات کاربر",
+      headerName: "کاربر",
       width: 200,
       renderCell: (params) => (
         <div>
@@ -78,17 +94,6 @@ const AdminTransactionsPage = () => {
           </div>
         </div>
       ),
-    },
-    {
-      field: "created_at",
-      headerName: "تاریخ تراکنش",
-      width: 150,
-      renderCell: (params) => formatDate(params.value),
-    },
-    {
-      field: "order_id",
-      headerName: "کد پیگیری",
-      width: 150,
     },
     {
       field: "amount",
@@ -101,6 +106,23 @@ const AdminTransactionsPage = () => {
       headerName: "نوع",
       width: 100,
       renderCell: (params) => getTypeLabel(params.value),
+    },
+    {
+      field: "order_id",
+      headerName: "کد پیگیری",
+      width: 150,
+    },
+    {
+      field: "description",
+      headerName: "توضیحات",
+      width: 200,
+      renderCell: (params) => params.value || "-",
+    },
+    {
+      field: "created_at",
+      headerName: "تاریخ",
+      width: 150,
+      renderCell: (params) => formatDate(params.value),
     },
     {
       field: "status",
@@ -124,43 +146,17 @@ const AdminTransactionsPage = () => {
     {
       field: "actions",
       headerName: "عملیات",
-      width: 200,
+      width: 150,
       sortable: false,
       filterable: false,
-      renderCell: (params) => (
-        <ApproveTransactionButton transaction={params.row} />
-      ),
+      renderCell: (params) => <TransactionActions transaction={params.row} />,
     },
   ];
 
-  const handleFilterChange = (event: any) => {
-    setFilterStatus(event.target.value);
-  };
-
   return (
     <Container maxWidth="xl" className="py-4">
-      <Typography variant="h4" gutterBottom>
-        مدیریت تراکنش‌ها
-      </Typography>
-
-      <Box sx={{ mb: 3, display: "flex", gap: 2, alignItems: "center" }}>
-        <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel>فیلتر بر اساس وضعیت</InputLabel>
-          <Select
-            value={filterStatus}
-            label="فیلتر بر اساس وضعیت"
-            onChange={handleFilterChange}
-          >
-            <MenuItem value="all">همه</MenuItem>
-            <MenuItem value={TransactionStatus.PENDING}>در حال بررسی</MenuItem>
-            <MenuItem value={TransactionStatus.APPROVED}>تایید شده</MenuItem>
-            <MenuItem value={TransactionStatus.REJECTED}>رد شده</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-
       <StatusHandler status={status} refetch={refetch}>
-        <div style={{ height: 600, width: "100%" }}>
+        <Box style={{ height: 600, width: "100%" }}>
           <DataGrid
             rows={data?.data || []}
             columns={columns}
@@ -185,11 +181,19 @@ const AdminTransactionsPage = () => {
                 borderBottom: "2px solid #e0e0e0",
               },
             }}
+            localeText={{
+              noRowsLabel: "تراکنش در انتظار تایید موجود نیست",
+              footerRowSelected: (count) => `${count} سطر انتخاب شده`,
+              footerTotalRows: "مجموع سطرها:",
+              paginationRowsPerPage: "تعداد سطر:",
+              paginationDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} از ${count}`,
+            }}
           />
-        </div>
+        </Box>
       </StatusHandler>
     </Container>
   );
 };
 
-export default AdminTransactionsPage;
+export default AdminPendingTransactionsPage;

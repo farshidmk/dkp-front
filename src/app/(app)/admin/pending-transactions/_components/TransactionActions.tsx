@@ -1,20 +1,19 @@
 "use client";
 
-import { Transaction, TransactionStatus } from "@/types/wallet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { IconButton, CircularProgress, Box } from "@mui/material";
+import { Check, Close } from "@mui/icons-material";
 import { toast } from "react-toastify";
+
+import { Transaction, TransactionStatus } from "@/types/wallet";
 import { serverCall } from "@/services/serverCall";
 import { ServerCall } from "@/types/server";
-import { Button, CircularProgress } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
 
-interface ApproveTransactionButtonProps {
+interface TransactionActionsProps {
   transaction: Transaction;
-  onSuccess?: () => void;
 }
 
-const ApproveTransactionButton = ({ transaction, onSuccess }: ApproveTransactionButtonProps) => {
+const TransactionActions = ({ transaction }: TransactionActionsProps) => {
   const queryClient = useQueryClient();
 
   const { mutate: approveTransaction, isPending: isApproving } = useMutation({
@@ -28,8 +27,9 @@ const ApproveTransactionButton = ({ transaction, onSuccess }: ApproveTransaction
     },
     onSuccess: () => {
       toast.success("تراکنش تایید شد");
-      queryClient.invalidateQueries({ queryKey: ["admin", "transactions"] });
-      onSuccess?.();
+      queryClient.invalidateQueries({
+        queryKey: ["admin", "transactions", "pending"],
+      });
     },
     onError: (error: any) => {
       toast.error(error?.message || "خطا در تایید تراکنش");
@@ -47,8 +47,9 @@ const ApproveTransactionButton = ({ transaction, onSuccess }: ApproveTransaction
     },
     onSuccess: () => {
       toast.success("تراکنش رد شد");
-      queryClient.invalidateQueries({ queryKey: ["admin", "transactions"] });
-      onSuccess?.();
+      queryClient.invalidateQueries({
+        queryKey: ["admin", "transactions", "pending"],
+      });
     },
     onError: (error: any) => {
       toast.error(error?.message || "خطا در رد تراکنش");
@@ -61,56 +62,40 @@ const ApproveTransactionButton = ({ transaction, onSuccess }: ApproveTransaction
 
   if (isApproved) {
     return (
-      <Button
-        size="small"
-        color="success"
-        variant="outlined"
-        startIcon={<CheckCircleIcon />}
-        disabled
-      >
-        تایید شده
-      </Button>
+      <IconButton color="success" disabled>
+        <Check />
+      </IconButton>
     );
   }
 
   if (isRejected) {
     return (
-      <Button
-        size="small"
-        color="error"
-        variant="outlined"
-        startIcon={<CancelIcon />}
-        disabled
-      >
-        رد شده
-      </Button>
+      <IconButton color="error" disabled>
+        <Close />
+      </IconButton>
     );
   }
 
   return (
-    <div className="flex gap-2">
-      <Button
-        size="small"
+    <Box style={{ display: "flex", gap: 4 }}>
+      <IconButton
         color="success"
-        variant="contained"
         onClick={() => approveTransaction()}
         disabled={isApproving || isRejecting}
-        startIcon={isApproving ? <CircularProgress size={16} /> : <CheckCircleIcon />}
-      >
-        {isApproving ? "در حال تایید..." : "تایید"}
-      </Button>
-      <Button
         size="small"
+      >
+        {isApproving ? <CircularProgress size={16} /> : <Check />}
+      </IconButton>
+      <IconButton
         color="error"
-        variant="outlined"
         onClick={() => rejectTransaction()}
         disabled={isApproving || isRejecting}
-        startIcon={isRejecting ? <CircularProgress size={16} /> : <CancelIcon />}
+        size="small"
       >
-        {isRejecting ? "در حال رد..." : "رد"}
-      </Button>
-    </div>
+        {isRejecting ? <CircularProgress size={16} /> : <Close />}
+      </IconButton>
+    </Box>
   );
 };
 
-export default ApproveTransactionButton;
+export default TransactionActions;
