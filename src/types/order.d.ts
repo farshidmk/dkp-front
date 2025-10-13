@@ -30,9 +30,11 @@ export type DkpResponse = {
           webp_url: string[];
         };
       };
-      price: {
-        selling_price: number;
-        order_limit: number;
+      default_variant: {
+        price: {
+          selling_price: number;
+          order_limit: number;
+        };
       };
     };
   };

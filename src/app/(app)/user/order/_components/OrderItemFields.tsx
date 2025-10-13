@@ -1,7 +1,7 @@
 "use client";
 
 import { errorHasMessage } from "@/services/typeGuards";
-import { DkpResponse, Order } from "@/types/order";
+import { Order } from "@/types/order";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ImageIcon from "@mui/icons-material/Image";
 import { Grid, IconButton, TextField } from "@mui/material";
@@ -11,15 +11,13 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { getProduct } from "../order.actions";
 import DkpErrorModal from "./DkpErrorModal";
 import { DEFAULT_ORDER_ITEM } from "./OrderForm";
+import mapDkpResponseToOrderItem from "../_services/mapDkpResponseToOrderItem";
 
 //TODO: use reactQuery and mutation - add spinner for loading data
 type Props = {
   index: number;
 };
-const OrderItem = ({ index }: Props) => {
-  const [digikalaItem, setDigikalaItem] = useState<DkpResponse | undefined>(
-    undefined
-  );
+const OrderItemFields = ({ index }: Props) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const {
     control,
@@ -37,14 +35,17 @@ const OrderItem = ({ index }: Props) => {
     try {
       const item = await getProduct(dkpCode);
       if (item?.status === 200) {
-        debugger;
         if (item.data.product.is_inactive) {
           throw new Error("کالا غیر فعال شده است");
         }
         if (item.data.product.status === "out_of_stock") {
           throw new Error("کالا موجود نمیباشد");
         }
-        setDigikalaItem(item);
+        const result = mapDkpResponseToOrderItem(item);
+        update(index, {
+          ...result,
+          dkp: dkpCode,
+        });
       }
     } catch (e) {
       if (errorHasMessage(e)) {
@@ -71,10 +72,10 @@ const OrderItem = ({ index }: Props) => {
         <Grid size={{ xs: 12, md: 1 }}>
           <div className="w-full flex items-center justify-center border border-gray-300 bg-gray-100 rounded-b-lg">
             <div className="flex items-center justify-center h-20 w-20 ">
-              {digikalaItem?.data?.product?.images?.main?.webp_url?.[0] ? (
+              {item.image_url ? (
                 <Image
                   alt={item?.title}
-                  src={digikalaItem?.data?.product?.images?.main?.webp_url?.[0]}
+                  src={item.image_url}
                   height={75}
                   width={75}
                 />
@@ -116,7 +117,7 @@ const OrderItem = ({ index }: Props) => {
           <TextField
             label="عنوان کالا"
             placeholder="عنوان کالا"
-            value={digikalaItem?.data?.product?.title_fa ?? ""}
+            value={item.title ?? ""}
             disabled
             fullWidth
             variant="filled"
@@ -129,9 +130,7 @@ const OrderItem = ({ index }: Props) => {
           <TextField
             label={"قیمت کالا ریال"}
             placeholder="قیمت به ریال"
-            value={digikalaItem?.data?.product?.price?.selling_price?.toLocaleString(
-              "fa"
-            )}
+            value={item.unit_price?.toLocaleString("fa")}
             disabled
             fullWidth
             variant="filled"
@@ -155,7 +154,7 @@ const OrderItem = ({ index }: Props) => {
             onChange={(e) =>
               update(index, { ...item, quantity: Number(e.target.value) })
             }
-            value={item.serial}
+            value={item.quantity}
             placeholder="تعداد"
             type="number"
             error={Boolean(error?.quantity?.message)}
@@ -173,7 +172,7 @@ const OrderItem = ({ index }: Props) => {
   );
 };
 
-export default OrderItem;
+export default OrderItemFields;
 
 function isOnlyNumbers(value: string): boolean {
   return /^\d+$/.test(value);

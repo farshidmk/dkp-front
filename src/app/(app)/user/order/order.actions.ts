@@ -18,13 +18,14 @@ export async function getProduct(dkpcode: string) {
       throw new Error(`خطا در دریافت کالا`);
     }
 
-    const data = await res.json();
     if (res.status !== 200) {
       throw new Error(`خطا در دریافت کالا`);
     }
+    const data = (await res.json()) as DkpResponse;
 
-    return data as DkpResponse;
+    return data;
   } catch (error) {
+    console.log(error);
     throw new Error(`خطا در دریافت کالا`);
   }
 }

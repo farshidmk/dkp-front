@@ -3,7 +3,7 @@
 import { Alert, Box, Button, Container } from "@mui/material";
 import React from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import OrderItem from "./OrderItem";
+import OrderItemFields from "./OrderItemFields";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,6 +39,8 @@ const OrderForm = () => {
 
   function onSubmit(values: OrderSchema) {
     //TODO: check balance in wallet and if it's enough continue
+
+    console.log({ values });
   }
 
   return (
@@ -51,7 +53,7 @@ const OrderForm = () => {
         >
           <div className="flex flex-col gap-2.5 mb-1.5 ">
             {fields?.map((_, index) => (
-              <OrderItem key={index} index={index} />
+              <OrderItemFields key={index} index={index} />
             ))}
           </div>
 
@@ -81,7 +83,7 @@ const OrderForm = () => {
               type="submit"
               className="w-60"
             >
-              سفارش
+              ایجاد فاکتور
             </Button>
           </div>
         </Box>
