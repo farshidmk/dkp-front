@@ -16,14 +16,18 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Balance } from "@/types/wallet";
+import { WalletBalance } from "@/types/wallet";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const UserNavbarButton = () => {
   const router = useRouter();
   const { firstName, lastName } = useUserInfo();
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
-  const { data, status, refetch } = useQuery<Balance, Error, Balance>({
+  const { data, status, refetch } = useQuery<
+    WalletBalance,
+    Error,
+    WalletBalance
+  >({
     queryKey: ["wallets", "me"],
     staleTime: Infinity,
   });

@@ -1,6 +1,11 @@
 import React from "react";
 import { FormTextFieldInput } from "@/types/renderFormItem";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  IconButton,
+  InputAdornment,
+  TextField,
+  TextFieldProps,
+} from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
@@ -12,9 +17,9 @@ const RenderTextInput = ({ label, inputProps, error }: FormTextFieldInput) => {
     <TextField
       label={label}
       variant="outlined"
-      size={"small"}
+      size="small"
       fullWidth
-      {...inputProps}
+      {...(inputProps as TextFieldProps)}
       type={
         isPassword
           ? showPassword

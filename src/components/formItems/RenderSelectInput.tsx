@@ -3,7 +3,15 @@ import React from "react";
 import StatusHandler from "../statusHandler/StatusHandler";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
-const RenderSelectInput = ({ label, name, options, status, refetch, error, inputProps }: FormSelectInput) => {
+const RenderSelectInput = ({
+  label,
+  name,
+  options,
+  status = "success",
+  refetch,
+  error,
+  inputProps,
+}: FormSelectInput) => {
   return (
     <StatusHandler status={status} refetch={refetch}>
       <FormControl fullWidth>
@@ -16,7 +24,7 @@ const RenderSelectInput = ({ label, name, options, status, refetch, error, input
           {...inputProps}
         >
           {options.map((option) => (
-            <MenuItem key={String(option.value)} value={option.value}>
+            <MenuItem href="123" key={String(option.value)}>
               {option.title}
             </MenuItem>
           ))}
