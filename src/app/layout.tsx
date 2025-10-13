@@ -4,8 +4,11 @@ import { vazirFont } from "@/ui/font";
 import ApplicationProviders from "@/providers/ApplicationProviders";
 
 export const metadata: Metadata = {
-  title: "دیجی تعمیر",
+  title: "دیجی تعمیر | Digi Tamir 🔧",
   description: "سفارش و گارانتی از دیجی تعمیر",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
