@@ -37,6 +37,7 @@ const TransactionForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<WalletFormData>({
     resolver: zodResolver(WalletFormValidation),
     defaultValues: {
@@ -47,17 +48,29 @@ const TransactionForm = () => {
     },
   });
 
+  const isCharge = watch("type") === TransactionType.CHARGE;
+
   const { mutate } = useMutation({
     mutationFn: async (data: WalletFormData) => {
+      const payload: any = {
+        ...data,
+        amount: Number(data.amount),
+        idempotency_key: crypto.randomUUID(),
+      };
+      // Only send tracking_number for charge, never send order_id
+      if (
+        data.type === TransactionType.CHARGE &&
+        data.order_id &&
+        String(data.order_id).trim() !== ""
+      ) {
+        payload.tracking_number = Number(data.order_id);
+      }
+      delete payload.order_id;
+
       const config: ServerCall = {
         method: "POST",
         url: "wallets/transactions",
-        data: {
-          ...data,
-          amount: Number(data.amount), // Convert string to number
-          order_id: Number(data.order_id), // Convert string to number
-          idempotency_key: crypto.randomUUID(),
-        },
+        data: payload,
       };
       return await serverCall(config);
     },
@@ -90,7 +103,7 @@ const TransactionForm = () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12, md: 2 }}>
+            <Grid size={{ xs: 12, md: isCharge ? 2 : 3 }}>
               <Controller
                 name="type"
                 control={control}
@@ -113,7 +126,7 @@ const TransactionForm = () => {
               )}
             </Grid>
 
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid size={{ xs: 12, md: isCharge ? 4 : 9 }}>
               <Controller
                 name="amount"
                 control={control}
@@ -130,22 +143,24 @@ const TransactionForm = () => {
               />
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Controller
-                name="order_id"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    type="number"
-                    fullWidth
-                    label="کد پیگیری"
-                    error={Boolean(errors.order_id)}
-                    helperText={errors.order_id?.message}
-                  />
-                )}
-              />
-            </Grid>
+            {isCharge && (
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Controller
+                  name="order_id"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      type="number"
+                      fullWidth
+                      label="کد پیگیری"
+                      error={Boolean(errors.order_id)}
+                      helperText={errors.order_id?.message}
+                    />
+                  )}
+                />
+              </Grid>
+            )}
 
             <Grid size={{ xs: 12 }}>
               <Controller
