@@ -48,7 +48,7 @@ const ApplicationProviders = ({ children }: Props) => {
             draggable={true}
             theme={"light"}
             transition={Bounce}
-            position={"top-right"}
+            position={"bottom-right"}
             autoClose={5000}
             rtl
           />
