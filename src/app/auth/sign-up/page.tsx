@@ -31,8 +31,19 @@ const LoginPage = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      password: "",
       mobile: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+      national_code: "",
+      digikala_panel_name: "",
+      digikala_merchant_number: "",
+      province: "",
+      city: "",
+      address: "",
+      postal_code: "", // Iranian postal code (10 digits)
+      telephone: "",
+      email: "",
     },
     resolver: zodResolver(SignUpFormValidation),
   });
@@ -66,29 +77,32 @@ const LoginPage = () => {
 
       <form onSubmit={handleSubmit(onSubmitHandler)} className="mt-4">
         <Grid container spacing={1} sx={{ mb: 1 }}>
-          {SIGN_UP_FORM_ITEMS.map((item) => (
-            <Grid
-              size={{
-                xs: 12,
-                sm: 6,
-              }}
-              key={item.name}
-            >
-              <Controller
-                name={item.name as keyof SignUpFormItems}
-                control={control}
-                render={({ field }) => {
-                  return (
-                    <RenderFormItem
-                      {...item}
-                      inputProps={{ ...field, ...item.inputProps } as any}
-                      error={errors?.[item.name]?.message}
-                    />
-                  );
+          {SIGN_UP_FORM_ITEMS.map((item) => {
+            const isAddress = item.name === "address";
+            return (
+              <Grid
+                size={{
+                  xs: 12,
+                  sm: isAddress ? 12 : 6,
                 }}
-              />
-            </Grid>
-          ))}
+                key={item.name}
+              >
+                <Controller
+                  name={item.name as keyof SignUpFormItems}
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <RenderFormItem
+                        {...item}
+                        inputProps={{ ...field, ...item.inputProps } as any}
+                        error={errors?.[item.name]?.message}
+                      />
+                    );
+                  }}
+                />
+              </Grid>
+            );
+          })}
         </Grid>
         {error && <ShowErrors errors={error.message} />}
         <Button
@@ -155,6 +169,11 @@ export const SIGN_UP_FORM_ITEMS: FormFieldInput<SignUpFormItems>[] = [
     },
   },
   {
+    name: "email",
+    inputType: "text",
+    label: "ایمیل",
+  },
+  {
     name: "digikala_panel_name",
     inputType: "text",
     label: "نام پنل دیجی‌کالا",
@@ -175,11 +194,6 @@ export const SIGN_UP_FORM_ITEMS: FormFieldInput<SignUpFormItems>[] = [
     label: "شهر",
   },
   {
-    name: "address",
-    inputType: "text",
-    label: "آدرس",
-  },
-  {
     name: "postal_code",
     inputType: "text",
     label: "کد پستی",
@@ -194,5 +208,10 @@ export const SIGN_UP_FORM_ITEMS: FormFieldInput<SignUpFormItems>[] = [
     inputProps: {
       placeholder: "مثال 02112345678",
     },
+  },
+  {
+    name: "address",
+    inputType: "text",
+    label: "آدرس",
   },
 ];

@@ -11,6 +11,10 @@ export const SignUpFormValidation = z.object({
     .nonempty("رمز عبور نباید خالی باشد"),
   first_name: z.string().nonempty("نام نباید خالی باشد"),
   last_name: z.string().nonempty("نام خانوادگی نباید خالی باشد"),
+  email: z
+    .string()
+    .nonempty("ایمیل نباید خالی باشد")
+    .email("ایمیل را به درستی وارد کنید"),
   national_code: z.string().nonempty("کد ملی نباید خالی باشد"),
   digikala_panel_name: z.string().nonempty("نام پنل دیجی‌کالا نباید خالی باشد"),
   digikala_merchant_number: z

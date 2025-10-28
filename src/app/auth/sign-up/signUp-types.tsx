@@ -13,6 +13,7 @@ export type SignUpFormItems = {
   address: string;
   postal_code: string; // Iranian postal code (10 digits)
   telephone: string;
+  email: string;
 };
 
 export type SignUpResponse = {
