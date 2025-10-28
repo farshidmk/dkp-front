@@ -11,6 +11,10 @@ export const UserProfileFormValidation = z.object({
   province: z.string().nonempty("استان نباید خالی باشد"),
   city: z.string().nonempty("شهر نباید خالی باشد"),
   address: z.string().nonempty("آدرس نباید خالی باشد"),
+  email: z
+    .string()
+    .nonempty("آدرس نباید خالی باشد")
+    .email("ایمیل را به درستی وارد کنید"),
   postal_code: z.string().nonempty("کد پستی نباید خالی باشد"),
   // .regex(/^\d{10}$/, "کد پستی نامعتبر است"), // Matches Iranian postal codes
   telephone: z.string().nonempty("تلفن نباید خالی باشد"),
