@@ -19,7 +19,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import { CreateTransactionRequest, TransactionType } from "@/types/wallet";
+import { TransactionType } from "@/types/wallet";
 import { WalletFormValidation } from "../wallet.validation";
 import { serverCall } from "@/services/serverCall";
 import { ServerCall } from "@/types/server";

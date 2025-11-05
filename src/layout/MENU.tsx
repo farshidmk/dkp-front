@@ -4,7 +4,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import GroupIcon from "@mui/icons-material/Group";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import SecurityIcon from "@mui/icons-material/Security";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 type MenuType = {
@@ -29,5 +29,10 @@ export const ADMIN_MENU: MenuType[] = [
     title: "مدیریت تراکنش‌ها",
     icon: <PendingActionsIcon />,
     path: "/admin/pending-transactions",
+  },
+  {
+    title: "گارانتی ها",
+    icon: <SecurityIcon />,
+    path: "/admin/warranties",
   },
 ];
