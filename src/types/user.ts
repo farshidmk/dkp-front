@@ -1,3 +1,5 @@
+import { SignUpFormItems } from "@/app/auth/sign-up/signUp-types";
+
 export type User = {
   id: number;
   firstName: string;
@@ -19,16 +21,6 @@ export type UserInfo = {
   profile: UserProfile;
 };
 
-type UserProfile = {
+type UserProfile = SignUpFormItems & {
   user_id: number;
-  first_name: string;
-  last_name: string;
-  national_code: string;
-  digikala_panel_name: string;
-  digikala_merchant_number: string;
-  province: string;
-  city: string;
-  address: string;
-  postal_code: string;
-  telephone: string;
 };

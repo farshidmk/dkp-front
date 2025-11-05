@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import ApproveButton from "./_components/ApproveButton";
 import { useState } from "react";
 import EditUserProfile from "./_components/EditUserProfile";
+import ViewUserProfileButton from "./_components/ViewUserProfileButton";
 
 const UsersPage = () => {
   const [selectedUserId, setSelectedUserId] = useState<User["id"] | undefined>(
@@ -87,10 +88,12 @@ const UsersPage = () => {
                           isApproved={user.approved}
                           userId={user.id}
                         />
+                        <ViewUserProfileButton user={user.profile} />
                         <Tooltip title="ویرایش">
                           <IconButton
                             color="primary"
                             onClick={() => setSelectedUserId(user.id)}
+                            disabled
                           >
                             <EditIcon />
                           </IconButton>
