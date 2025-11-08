@@ -1,15 +1,21 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { Container, Grid } from "@mui/material";
 import React from "react";
 
 import WalletBalanceCard from "./_components/WalletBalanceCard";
 import TransactionsTable from "./_components/TransactionsTable";
 import TransactionForm from "./_components/TransactionForm";
-import { useWalletBalance } from "@/hooks/useWalletBalance";
+import { getRequest } from "@/services/serverCall";
+import { WalletBalance } from "@/types/wallet";
 
 const UserWallet = () => {
-  const { data: balance, status: balanceStatus } = useWalletBalance();
+  const { data: balance, status: balanceStatus } = useQuery<WalletBalance>({
+    queryKey: ["wallets", "me"],
+    queryFn: getRequest(),
+    staleTime: 30000,
+  });
 
   return (
     <Container maxWidth="lg" className="py-4">
