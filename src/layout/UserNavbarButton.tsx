@@ -21,8 +21,13 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 
 const UserNavbarButton = () => {
   const router = useRouter();
+  const [mounted, setMounted] = React.useState(false);
   const { firstName, lastName } = useUserInfo();
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   const { data, status, refetch } = useQuery<
     WalletBalance,
     Error,
@@ -60,7 +65,9 @@ const UserNavbarButton = () => {
           <Typography
             variant="body1"
             fontSize={12}
-          >{`${firstName} ${lastName}`}</Typography>
+          >
+            {mounted ? `${firstName} ${lastName}` : "..."}
+          </Typography>
           {status === "pending" ? (
             <LinearProgress />
           ) : status === "error" ? (
