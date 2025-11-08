@@ -65,9 +65,10 @@ const TransactionsTable = () => {
       renderCell: (params) => (params.value ? formatDate(params.value) : "-"),
     },
     {
-      field: "order_id",
+      field: "tracking_number",
       headerName: "کد پیگیری",
       width: 150,
+      renderCell: (params) => params.value || "-",
     },
     {
       field: "amount",
