@@ -1,16 +1,23 @@
 "use client";
 
-import { Container, Typography, Box } from "@mui/material";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { Container, Typography, Box, Chip } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 
 import StatusHandler from "@/components/statusHandler/StatusHandler";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import TransactionActions from "./_components/TransactionActions";
-import { Transaction, TransactionStatus } from "@/types/wallet";
+import { Transaction } from "@/types/wallet";
 import { serverCall } from "@/services/serverCall";
+import {
+  getTransactionStatusChipColor,
+  getTransactionStatusLabel,
+  getTransactionTypeLabel,
+  formatPersianDate,
+  formatPersianAmount,
+} from "@/app/(app)/admin/manage-transactions/utils/transactionHelpers";
 
-const AdminPendingTransactionsPage = () => {
+const AdminManageTransactionsPage = () => {
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -21,7 +28,7 @@ const AdminPendingTransactionsPage = () => {
       "wallets",
       "transactions",
       "admin",
-      "pending",
+      "manage",
       paginationModel.page,
       paginationModel.pageSize,
     ],
@@ -38,44 +45,6 @@ const AdminPendingTransactionsPage = () => {
       });
     },
   });
-
-  const getStatusColor = (status: TransactionStatus) => {
-    switch (status) {
-      case TransactionStatus.APPROVED:
-        return "#4caf50";
-      case TransactionStatus.REJECTED:
-        return "#f44336";
-      case TransactionStatus.PENDING:
-        return "#ff9800";
-      default:
-        return "#757575";
-    }
-  };
-
-  const getStatusLabel = (status: TransactionStatus) => {
-    switch (status) {
-      case TransactionStatus.APPROVED:
-        return "تایید شد";
-      case TransactionStatus.REJECTED:
-        return "رد شد";
-      case TransactionStatus.PENDING:
-        return "در حال بررسی";
-      default:
-        return status;
-    }
-  };
-
-  const getTypeLabel = (type: string) => {
-    return type === "charge" ? "شارژ" : "برداشت";
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("fa");
-  };
-
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString("fa");
-  };
 
   const columns: GridColDef[] = [
     {
@@ -101,13 +70,13 @@ const AdminPendingTransactionsPage = () => {
       field: "amount",
       headerName: "مبلغ",
       width: 120,
-      renderCell: (params) => `${formatAmount(params.value)} تومان`,
+      renderCell: (params) => `${formatPersianAmount(params.value)} تومان`,
     },
     {
       field: "type",
       headerName: "نوع",
       width: 100,
-      renderCell: (params) => getTypeLabel(params.value),
+      renderCell: (params) => getTransactionTypeLabel(params.value),
     },
     {
       field: "order_id",
@@ -124,25 +93,18 @@ const AdminPendingTransactionsPage = () => {
       field: "created_at",
       headerName: "تاریخ",
       width: 150,
-      renderCell: (params) => formatDate(params.value),
+      renderCell: (params) => formatPersianDate(params.value),
     },
     {
       field: "status",
       headerName: "وضعیت",
       width: 150,
       renderCell: (params) => (
-        <div
-          style={{
-            backgroundColor: getStatusColor(params.value),
-            color: "white",
-            padding: "4px 8px",
-            borderRadius: "4px",
-            fontSize: "0.8em",
-            textAlign: "center",
-          }}
-        >
-          {getStatusLabel(params.value)}
-        </div>
+        <Chip
+          label={getTransactionStatusLabel(params.value)}
+          color={getTransactionStatusChipColor(params.value)}
+          size="small"
+        />
       ),
     },
     {
@@ -198,4 +160,4 @@ const AdminPendingTransactionsPage = () => {
   );
 };
 
-export default AdminPendingTransactionsPage;
+export default AdminManageTransactionsPage;

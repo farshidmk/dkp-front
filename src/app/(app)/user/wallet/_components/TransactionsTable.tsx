@@ -11,6 +11,11 @@ import {
 
 import { TransactionStatus } from "@/types/wallet";
 import { useWalletTransactions } from "@/hooks/useWalletTransactions";
+import {
+  getTransactionStatusLabel,
+  formatPersianDate,
+  formatPersianAmount,
+} from "@/app/(app)/admin/manage-transactions/utils/transactionHelpers";
 
 const TransactionsTable = () => {
   const [paginationModel, setPaginationModel] = useState({
@@ -26,7 +31,6 @@ const TransactionsTable = () => {
   const getStatusColor = (status: TransactionStatus) => {
     switch (status) {
       case TransactionStatus.APPROVED:
-        return "success";
       case TransactionStatus.COMPLETED:
         return "success";
       case TransactionStatus.REJECTED:
@@ -38,35 +42,13 @@ const TransactionsTable = () => {
     }
   };
 
-  const getStatusLabel = (status: TransactionStatus) => {
-    switch (status) {
-      case TransactionStatus.APPROVED:
-        return "تایید شد";
-      case TransactionStatus.COMPLETED:
-        return "انجام شده";
-      case TransactionStatus.REJECTED:
-        return "رد شد";
-      case TransactionStatus.PENDING:
-        return "در حال بررسی";
-      default:
-        return status;
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("fa");
-  };
-
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString("fa");
-  };
-
   const columns: GridColDef[] = [
     {
       field: "created_at",
       headerName: "تاریخ ثبت",
       width: 150,
-      renderCell: (params) => (params.value ? formatDate(params.value) : "-"),
+      renderCell: (params) =>
+        params.value ? formatPersianDate(params.value) : "-",
     },
     {
       field: "tracking_number",
@@ -78,7 +60,7 @@ const TransactionsTable = () => {
       field: "amount",
       headerName: "مبلغ",
       width: 120,
-      renderCell: (params) => `${formatAmount(params.value)} تومان`,
+      renderCell: (params) => `${formatPersianAmount(params.value)} تومان`,
     },
     {
       field: "status",
@@ -86,7 +68,7 @@ const TransactionsTable = () => {
       width: 150,
       renderCell: (params) => (
         <Chip
-          label={getStatusLabel(params.value)}
+          label={getTransactionStatusLabel(params.value)}
           color={getStatusColor(params.value) as any}
           size="small"
         />
@@ -138,7 +120,8 @@ const TransactionsTable = () => {
               footerRowSelected: (count) => `${count} سطر انتخاب شده`,
               footerTotalRows: "مجموع سطرها:",
               paginationRowsPerPage: "تعداد سطر:",
-              paginationDisplayedRows: ({ from, to, count }) => `${from}–${to} از ${count}`,
+              paginationDisplayedRows: ({ from, to, count }) =>
+                `${from}–${to} از ${count}`,
             }}
           />
         </div>

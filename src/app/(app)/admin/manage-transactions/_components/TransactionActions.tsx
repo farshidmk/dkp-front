@@ -16,6 +16,22 @@ interface TransactionActionsProps {
 const TransactionActions = ({ transaction }: TransactionActionsProps) => {
   const queryClient = useQueryClient();
 
+  const updateTransactionInCache = (
+    transactionId: number,
+    newStatus: TransactionStatus
+  ) => {
+    // Update all matching query keys
+    queryClient.setQueriesData<Transaction[]>(
+      { queryKey: ["wallets", "transactions", "admin", "manage"] },
+      (oldData) => {
+        if (!oldData) return oldData;
+        return oldData.map((t) =>
+          t.id === transactionId ? { ...t, status: newStatus } : t
+        );
+      }
+    );
+  };
+
   const { mutate: approveTransaction, isPending: isApproving } = useMutation({
     mutationFn: async () => {
       const config: ServerCall = {
@@ -25,14 +41,21 @@ const TransactionActions = ({ transaction }: TransactionActionsProps) => {
       };
       return await serverCall(config);
     },
+    onMutate: async () => {
+      // Optimistically update the UI
+      updateTransactionInCache(transaction.id, TransactionStatus.APPROVED);
+    },
     onSuccess: () => {
       toast.success("تراکنش تایید شد");
+      // Refetch to ensure data is in sync with server
       queryClient.invalidateQueries({
-        queryKey: ["admin", "transactions", "pending"],
+        queryKey: ["wallets", "transactions", "admin", "manage"],
       });
     },
     onError: (error: any) => {
       toast.error(error?.message || "خطا در تایید تراکنش");
+      // Revert optimistic update on error
+      updateTransactionInCache(transaction.id, transaction.status);
     },
   });
 
@@ -45,14 +68,21 @@ const TransactionActions = ({ transaction }: TransactionActionsProps) => {
       };
       return await serverCall(config);
     },
+    onMutate: async () => {
+      // Optimistically update the UI
+      updateTransactionInCache(transaction.id, TransactionStatus.REJECTED);
+    },
     onSuccess: () => {
       toast.success("تراکنش رد شد");
+      // Refetch to ensure data is in sync with server
       queryClient.invalidateQueries({
-        queryKey: ["admin", "transactions", "pending"],
+        queryKey: ["wallets", "transactions", "admin", "manage"],
       });
     },
     onError: (error: any) => {
       toast.error(error?.message || "خطا در رد تراکنش");
+      // Revert optimistic update on error
+      updateTransactionInCache(transaction.id, transaction.status);
     },
   });
 
