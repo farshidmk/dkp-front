@@ -27,6 +27,8 @@ const TransactionsTable = () => {
     switch (status) {
       case TransactionStatus.APPROVED:
         return "success";
+      case TransactionStatus.COMPLETED:
+        return "success";
       case TransactionStatus.REJECTED:
         return "error";
       case TransactionStatus.PENDING:
@@ -40,6 +42,8 @@ const TransactionsTable = () => {
     switch (status) {
       case TransactionStatus.APPROVED:
         return "تایید شد";
+      case TransactionStatus.COMPLETED:
+        return "انجام شده";
       case TransactionStatus.REJECTED:
         return "رد شد";
       case TransactionStatus.PENDING:
@@ -105,7 +109,7 @@ const TransactionsTable = () => {
 
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
-            rows={data?.data || []}
+            rows={data || []}
             columns={columns}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}

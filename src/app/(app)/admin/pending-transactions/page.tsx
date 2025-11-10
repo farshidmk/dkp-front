@@ -16,12 +16,7 @@ const AdminPendingTransactionsPage = () => {
     pageSize: 10,
   });
 
-  const { data, status, refetch } = useQuery<{
-    data: Transaction[];
-    total: number;
-    page: number;
-    limit: number;
-  }>({
+  const { data, status, refetch } = useQuery<Transaction[]>({
     queryKey: [
       "wallets",
       "transactions",
@@ -30,11 +25,18 @@ const AdminPendingTransactionsPage = () => {
       paginationModel.page,
       paginationModel.pageSize,
     ],
-    queryFn: async () =>
-      await serverCall({
+    queryFn: async () => {
+      const filter = {
+        skip: paginationModel.page * paginationModel.pageSize,
+        take: paginationModel.pageSize,
+        order: { created_at: "DESC" },
+      };
+      const filterParam = encodeURIComponent(JSON.stringify(filter));
+      return await serverCall({
         method: "GET",
-        url: `wallets/transactions/admin/pending?page=${paginationModel.page}&limit=${paginationModel.pageSize}`,
-      }),
+        url: `wallets/transactions/admin/pending?filter=${filterParam}`,
+      });
+    },
   });
 
   const getStatusColor = (status: TransactionStatus) => {
@@ -158,7 +160,7 @@ const AdminPendingTransactionsPage = () => {
       <StatusHandler status={status} refetch={refetch}>
         <Box style={{ height: 600, width: "100%" }}>
           <DataGrid
-            rows={data?.data || []}
+            rows={data || []}
             columns={columns}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}

@@ -1,13 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { serverCall } from "@/services/serverCall";
-import { GetTransactionsResponse } from "@/types/wallet";
+import { Transaction } from "@/types/wallet";
 
 export const useWalletTransactions = (page: number, pageSize: number) => {
-  return useQuery<GetTransactionsResponse>({
+  return useQuery<Transaction[]>({
     queryKey: ["wallets", "transactions", page, pageSize],
     queryFn: async () => {
-      return await serverCall<GetTransactionsResponse>({
-        url: `wallets/transactions?page=${page}&limit=${pageSize}`,
+      const filter = {
+        skip: page * pageSize,
+        take: pageSize,
+        order: { created_at: "DESC" },
+      };
+      const filterParam = encodeURIComponent(JSON.stringify(filter));
+      return await serverCall<Transaction[]>({
+        url: `wallets/transactions?filter=${filterParam}`,
         method: "GET",
       });
     },
