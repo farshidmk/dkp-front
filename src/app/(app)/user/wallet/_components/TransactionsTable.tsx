@@ -31,7 +31,6 @@ const TransactionsTable = () => {
   const getStatusColor = (status: TransactionStatus) => {
     switch (status) {
       case TransactionStatus.APPROVED:
-      case TransactionStatus.COMPLETED:
         return "success";
       case TransactionStatus.REJECTED:
         return "error";

@@ -7,7 +7,6 @@ export enum TransactionStatus {
   PENDING = "pending",
   APPROVED = "approved",
   REJECTED = "rejected",
-  COMPLETED = "completed",
 }
 
 export type WalletBalance = {

@@ -5,7 +5,6 @@ export const getTransactionStatusColor = (
 ): string => {
   switch (status) {
     case TransactionStatus.APPROVED:
-    case TransactionStatus.COMPLETED:
       return "#4caf50";
     case TransactionStatus.REJECTED:
       return "#f44336";
@@ -21,7 +20,6 @@ export const getTransactionStatusChipColor = (
 ): "success" | "error" | "warning" | "default" => {
   switch (status) {
     case TransactionStatus.APPROVED:
-    case TransactionStatus.COMPLETED:
       return "success";
     case TransactionStatus.REJECTED:
       return "error";
@@ -35,13 +33,11 @@ export const getTransactionStatusChipColor = (
 export const getTransactionStatusLabel = (status: TransactionStatus): string => {
   switch (status) {
     case TransactionStatus.APPROVED:
-      return "تایید شد";
-    case TransactionStatus.COMPLETED:
-      return "انجام شده";
+      return "تایید شده";
     case TransactionStatus.REJECTED:
-      return "رد شد";
+      return "رد شده";
     case TransactionStatus.PENDING:
-      return "در حال بررسی";
+      return "در انتظار تایید";
     default:
       return status;
   }
