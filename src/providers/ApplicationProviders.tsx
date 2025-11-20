@@ -31,6 +31,7 @@ const queryClient = new QueryClient({
 const rtlCache = createCache({
   key: "muirtl",
   stylisPlugins: [prefixer, rtlPlugin],
+  prepend: true,
 });
 
 const ApplicationProviders = ({ children }: Props) => {
