@@ -8,10 +8,9 @@ import { Grid, IconButton, TextField } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { getProduct } from "../order.actions";
 import DkpErrorModal from "./DkpErrorModal";
 import { DEFAULT_ORDER_ITEM } from "./OrderForm";
-import mapDkpResponseToOrderItem from "../_services/mapDkpResponseToOrderItem";
+import { useOrderItemLookup } from "../hooks/useOrderItemLookup";
 
 //TODO: use reactQuery and mutation - add spinner for loading data
 type Props = {
@@ -27,26 +26,18 @@ const OrderItemFields = ({ index }: Props) => {
     control,
     name: "items",
   });
+  const { mutateAsync: fetchItem } = useOrderItemLookup();
   const item = fields?.[index];
   const error = errors.items?.[index];
 
   async function getItem(dkpCode: string) {
     if (dkpCode.length < 4) return false;
     try {
-      const item = await getProduct(dkpCode);
-      if (item?.status === 200) {
-        if (item.data.product.is_inactive) {
-          throw new Error("کالا غیر فعال شده است");
-        }
-        if (item.data.product.status === "out_of_stock") {
-          throw new Error("کالا موجود نمیباشد");
-        }
-        const result = mapDkpResponseToOrderItem(item);
-        update(index, {
-          ...result,
-          dkp: dkpCode,
-        });
-      }
+      const result = await fetchItem(dkpCode);
+      update(index, {
+        ...result,
+        dkp: dkpCode,
+      });
     } catch (e) {
       if (errorHasMessage(e)) {
         setErrorMessage(e.message);

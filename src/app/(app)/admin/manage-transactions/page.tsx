@@ -1,14 +1,12 @@
 "use client";
 
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { Container, Typography, Box, Chip } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { Container, Box, Chip } from "@mui/material";
+import React from "react";
 
 import StatusHandler from "@/components/statusHandler/StatusHandler";
 import TransactionActions from "./_components/TransactionActions";
-import { Transaction } from "@/types/wallet";
-import { serverCall } from "@/services/serverCall";
+import { useAdminTransactions } from "./hooks/useAdminTransactions";
 import {
   getTransactionStatusChipColor,
   getTransactionStatusLabel,
@@ -18,33 +16,8 @@ import {
 } from "@/app/(app)/admin/manage-transactions/utils/transactionHelpers";
 
 const AdminManageTransactionsPage = () => {
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 10,
-  });
-
-  const { data, status, refetch } = useQuery<Transaction[]>({
-    queryKey: [
-      "wallets",
-      "transactions",
-      "admin",
-      "manage",
-      paginationModel.page,
-      paginationModel.pageSize,
-    ],
-    queryFn: async () => {
-      const filter = {
-        skip: paginationModel.page * paginationModel.pageSize,
-        take: paginationModel.pageSize,
-        order: { created_at: "DESC" },
-      };
-      const filterParam = encodeURIComponent(JSON.stringify(filter));
-      return await serverCall({
-        method: "GET",
-        url: `wallets/transactions/admin/pending?filter=${filterParam}`,
-      });
-    },
-  });
+  const { data, status, refetch, paginationModel, setPaginationModel } =
+    useAdminTransactions();
 
   const columns: GridColDef[] = [
     {

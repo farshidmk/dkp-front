@@ -2,15 +2,10 @@
 
 import { Card, CardContent, Typography, Chip } from "@mui/material";
 import { useState } from "react";
-import {
-  DataGrid,
-  GridColDef,
-  GridToolbar,
-  GridPaginationModel,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 
 import { TransactionStatus } from "@/types/wallet";
-import { useWalletTransactions } from "@/hooks/useWalletTransactions";
+import { useWalletTransactions } from "../hooks/useWalletTransactions";
 import {
   getTransactionStatusLabel,
   formatPersianDate,
@@ -23,7 +18,7 @@ const TransactionsTable = () => {
     pageSize: 10,
   });
 
-  const { data, status, refetch } = useWalletTransactions(
+  const { data, status } = useWalletTransactions(
     paginationModel.page,
     paginationModel.pageSize
   );

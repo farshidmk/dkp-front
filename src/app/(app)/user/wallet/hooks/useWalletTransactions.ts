@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { serverCall } from "@/services/serverCall";
+
 import { Transaction } from "@/types/wallet";
+import { serverCall } from "@/services/serverCall";
 
 export const useWalletTransactions = (page: number, pageSize: number) => {
   return useQuery<Transaction[]>({
@@ -17,6 +18,7 @@ export const useWalletTransactions = (page: number, pageSize: number) => {
         method: "GET",
       });
     },
-    staleTime: 30000, // 30 seconds
+    staleTime: 30000,
   });
 };
+
