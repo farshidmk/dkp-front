@@ -18,6 +18,20 @@ import { UserProfileFormValidation } from "../profile.validation";
 
 type FormItems = Omit<SignUpFormItems, "mobile" | "password">;
 
+const PROFILE_DEFAULT_VALUES: FormItems = {
+  first_name: "",
+  last_name: "",
+  national_code: "",
+  digikala_panel_name: "",
+  digikala_merchant_number: "",
+  province: "",
+  city: "",
+  address: "",
+  postal_code: "",
+  telephone: "",
+  email: "",
+};
+
 const ProfileForm = () => {
   const { data, status, refetch } = useQuery<
     SignUpFormItems,
@@ -38,8 +52,9 @@ const ProfileForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<FormItems>({
     resolver: zodResolver(UserProfileFormValidation),
+    defaultValues: PROFILE_DEFAULT_VALUES,
   });
 
   useEffect(() => {
