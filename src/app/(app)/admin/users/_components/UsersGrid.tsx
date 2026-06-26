@@ -1,10 +1,12 @@
 import { AppDataGrid } from "@/components/dataGrid/AppDataGrid";
 import StatusHandler from "@/components/statusHandler/StatusHandler";
 import { useDataGridQuery } from "@/hooks/useDataGridQuery";
-import convertGridQueryToApiFilterParam from "@/services/convertGridQueryToApiFilterParam";
+import convertGridQueryToApiFilterParam, {
+  toQueryString,
+} from "@/services/convertGridQueryToApiFilterParam";
 import { AppGridColDef } from "@/types/data-grid";
 import { UserInfo } from "@/types/user";
-import { Chip, IconButton, Tooltip } from "@mui/material";
+import { Chip, Container, IconButton, Tooltip } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
 import ApproveButton from "./ApproveButton";
@@ -12,7 +14,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import FilterUsers from "./FilterUsers";
 import { PaginatedServerResponse } from "@/types/server";
-import { UserFilterItems, UserIsApproved } from "../users.type";
+import { UserFilterItems } from "../users.type";
+import ViewUserProfileButton from "./ViewUserProfileButton";
 
 const UsersGrid = () => {
   const {
@@ -24,7 +27,7 @@ const UsersGrid = () => {
   } = useDataGridQuery();
 
   const [filter, setFilter] = useState<UserFilterItems>({
-    isApproved: UserIsApproved.All,
+    isApproved: undefined,
     mobile: "",
     name: "",
   });
@@ -34,8 +37,10 @@ const UsersGrid = () => {
     Error,
     PaginatedServerResponse<UserInfo>
   >({
-    queryKey: ["users", `?${convertGridQueryToApiFilterParam(query)}`],
-    // queryKey: ["users", `?filter=${JSON.stringify(testFilter)}`],
+    queryKey: [
+      "users",
+      `?${convertGridQueryToApiFilterParam(query)}&${toQueryString(filter)}`,
+    ],
   });
 
   const columns = useMemo(
@@ -113,15 +118,11 @@ const UsersGrid = () => {
           const user = params.row as UserInfo;
 
           return (
-            <div>
+            <div className="flex items-center gap-2">
               <ApproveButton isApproved={user.approved} userId={user.id} />
-              <Tooltip title="ویرایش">
-                <Link href={`/users/${user.id}`}>
-                  <IconButton color="primary">
-                    <EditIcon />
-                  </IconButton>
-                </Link>
-              </Tooltip>
+              <ViewUserProfileButton
+                user={{ ...user.profile, mobile: user.mobile }}
+              />
             </div>
           );
         },
@@ -132,22 +133,24 @@ const UsersGrid = () => {
 
   return (
     <div className="h-full flex flex-col gap-1">
-      <FilterUsers setFilter={setFilter} />
-      <StatusHandler status={status} refetch={refetch} skeletonHeight={500}>
-        <AppDataGrid
-          rows={data?.items ?? []}
-          columns={columns}
-          loading={isFetching}
-          totalRows={data?.total ?? 0}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          sortModel={sortModel}
-          onSortModelChange={setSortModel}
-          gridProps={{
-            getRowId: (row: UserInfo) => row.id,
-          }}
-        />
-      </StatusHandler>
+      <FilterUsers setFilter={setFilter} isFetching={isFetching} />
+      <Container maxWidth="xl" sx={{ flex: 1, overflow: "auto" }}>
+        <StatusHandler status={status} refetch={refetch} skeletonHeight={500}>
+          <AppDataGrid
+            rows={data?.items ?? []}
+            columns={columns}
+            loading={isFetching}
+            totalRows={data?.total ?? 0}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            sortModel={sortModel}
+            onSortModelChange={setSortModel}
+            gridProps={{
+              getRowId: (row: UserInfo) => row.id,
+            }}
+          />
+        </StatusHandler>
+      </Container>
     </div>
   );
 };

@@ -15,7 +15,7 @@ export const useDataGridQuery = (initialPageSize = 10) => {
     const sort = sortModel[0];
 
     return {
-      page: paginationModel.page + 1,
+      pageNumber: paginationModel.page + 1,
       pageSize: paginationModel.pageSize,
       sortField: sort?.field,
       sortDirection: sort?.sort || undefined,
@@ -34,7 +34,7 @@ export const useDataGridQuery = (initialPageSize = 10) => {
 };
 
 export type DataGridQuery = {
-  page: number;
+  pageNumber: number;
   pageSize: number;
   sortField?: string;
   sortDirection?: string;

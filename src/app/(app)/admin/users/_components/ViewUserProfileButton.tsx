@@ -19,10 +19,11 @@ type Props = {
 
 const ViewUserProfileButton = ({ user }: Props) => {
   const [openModal, setOpenModal] = useState(false);
+
   return (
     <>
       <Tooltip title="نمایش مشخصات کاربر">
-        <IconButton onClick={() => setOpenModal(true)}>
+        <IconButton onClick={() => setOpenModal(true)} color="primary">
           <VisibilityIcon />
         </IconButton>
       </Tooltip>
@@ -65,7 +66,7 @@ const ViewUserProfileButton = ({ user }: Props) => {
                     />
                   </Grid>
                 );
-              }
+              },
             )}
           </Grid>
         </Box>

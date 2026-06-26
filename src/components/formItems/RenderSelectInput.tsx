@@ -15,16 +15,19 @@ const RenderSelectInput = ({
   return (
     <StatusHandler status={status} refetch={refetch}>
       <FormControl fullWidth>
-        <InputLabel id="render-select-input">{label}</InputLabel>
+        <InputLabel id={`render-select-input-${name}`}>{label}</InputLabel>
         <Select
-          labelId="render-select-input"
+          labelId={`render-select-input-${name}`}
           // value={age}
           label={label}
-          // onChange={handleChange}
+          size="small"
           {...inputProps}
+          onChange={inputProps?.onChange}
+          value={inputProps?.value}
         >
+          <MenuItem value={undefined}>همه</MenuItem>
           {options.map((option) => (
-            <MenuItem href="123" key={String(option.value)}>
+            <MenuItem value={option.value} key={String(option.value)}>
               {option.title}
             </MenuItem>
           ))}

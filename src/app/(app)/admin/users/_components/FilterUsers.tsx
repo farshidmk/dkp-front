@@ -1,16 +1,17 @@
 import RenderFormItem from "@/components/formItems/RenderFormItem";
 import { FormFieldInput } from "@/types/renderFormItem";
-import { Container, Grid, Paper, Typography } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { Button, Container, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { UserFilterItems, UserIsApproved } from "../users.type";
+import { UserFilterItems } from "../users.type";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 type Props = {
   setFilter: React.Dispatch<React.SetStateAction<UserFilterItems>>;
+  isFetching: boolean;
 };
 
-const FilterUsers = ({ setFilter }: Props) => {
+const FilterUsers = ({ setFilter, isFetching }: Props) => {
   const {
     control,
     handleSubmit,
@@ -18,7 +19,6 @@ const FilterUsers = ({ setFilter }: Props) => {
   } = useForm<UserFilterItems>({
     defaultValues: {
       mobile: "",
-      isApproved: UserIsApproved.All,
       name: "",
     },
   });
@@ -29,7 +29,7 @@ const FilterUsers = ({ setFilter }: Props) => {
   return (
     <Container maxWidth="lg">
       <Paper elevation={2} className="mb-2 p-3">
-        <Typography variant="h6">جستجو کاربران</Typography>
+        <Typography variant="h6">فیلتر کاربران</Typography>
         <form onSubmit={handleSubmit(onSubmitHandler)} className="mt-4">
           <Grid container spacing={1} sx={{ mb: 1 }}>
             {FILTER_ITEMS.map((item) => {
@@ -58,6 +58,18 @@ const FilterUsers = ({ setFilter }: Props) => {
               );
             })}
           </Grid>
+          <div className="flex justify-center ">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ width: "300px" }}
+              endIcon={<FilterAltIcon />}
+              loading={isFetching}
+            >
+              فیلتر
+            </Button>
+          </div>
         </form>
       </Paper>
     </Container>
@@ -87,16 +99,16 @@ const FILTER_ITEMS: FormFieldInput<UserFilterItems>[] = [
     options: [
       {
         title: "تایید شده",
-        value: UserIsApproved.Approved,
+        value: true,
       },
       {
         title: "تایید نشده",
-        value: UserIsApproved.NotApproved,
+        value: false,
       },
-      {
-        title: "همه",
-        value: UserIsApproved.All,
-      },
+      // {
+      //   title: "همه",
+      //   // value: -1,
+      // },
     ],
   },
 ];
