@@ -1,6 +1,14 @@
 "use client";
 
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useUserInfo } from "@/hooks/useUserInfo";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import React from "react";
 import {
   Box,
   Button,
@@ -9,27 +17,24 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
-import React from "react";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import LogoutIcon from "@mui/icons-material/Logout";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+
+import { getRequest } from "@/services/serverCall";
 import { WalletBalance } from "@/types/wallet";
-import RefreshIcon from "@mui/icons-material/Refresh";
 
 const UserNavbarButton = () => {
   const router = useRouter();
+  const [mounted, setMounted] = React.useState(false);
   const { firstName, lastName } = useUserInfo();
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
-  const { data, status, refetch } = useQuery<
-    WalletBalance,
-    Error,
-    WalletBalance
-  >({
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const { data, status, refetch } = useQuery<WalletBalance>({
     queryKey: ["wallets", "me"],
-    staleTime: Infinity,
+    queryFn: getRequest(),
+    staleTime: 30000, // 30 seconds
   });
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -57,10 +62,9 @@ const UserNavbarButton = () => {
         <AccountCircleIcon />
 
         <div className="flex flex-col gap-0 ">
-          <Typography
-            variant="body1"
-            fontSize={12}
-          >{`${firstName} ${lastName}`}</Typography>
+          <Typography variant="body1" fontSize={12}>
+            {mounted ? `${firstName} ${lastName}` : "..."}
+          </Typography>
           {status === "pending" ? (
             <LinearProgress />
           ) : status === "error" ? (

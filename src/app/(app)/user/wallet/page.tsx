@@ -6,7 +6,7 @@ import React from "react";
 import WalletBalanceCard from "./_components/WalletBalanceCard";
 import TransactionsTable from "./_components/TransactionsTable";
 import TransactionForm from "./_components/TransactionForm";
-import { useWalletBalance } from "@/hooks/useWalletBalance";
+import { useWalletBalance } from "./hooks/useWalletBalance";
 
 const UserWallet = () => {
   const { data: balance, status: balanceStatus } = useWalletBalance();

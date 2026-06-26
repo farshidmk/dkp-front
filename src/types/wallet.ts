@@ -25,6 +25,7 @@ export type Transaction = {
   idempotency_key: string;
   description?: string;
   status: TransactionStatus;
+  tracking_number?: string | null;
   created_at: string;
   updated_at: string;
   user_id?: number;
@@ -38,13 +39,6 @@ export type CreateTransactionRequest = {
   order_id: number;
   idempotency_key?: string;
   description?: string;
-};
-
-export type GetTransactionsResponse = {
-  data: Transaction[];
-  total: number;
-  page: number;
-  limit: number;
 };
 
 export type UpdateTransactionStatusRequest = {

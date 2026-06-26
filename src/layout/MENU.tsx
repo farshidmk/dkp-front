@@ -28,7 +28,7 @@ export const ADMIN_MENU: MenuType[] = [
   {
     title: "مدیریت تراکنش‌ها",
     icon: <PendingActionsIcon />,
-    path: "/admin/pending-transactions",
+    path: "/admin/manage-transactions",
   },
   {
     title: "گارانتی ها",

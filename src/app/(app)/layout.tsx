@@ -1,7 +1,6 @@
 "use client";
 
 import PageName from "@/components/pageName/PageName";
-import { useWalletBalance } from "@/hooks/useWalletBalance";
 import DrawerMenu from "@/layout/DrawerMenu";
 import UserNavbarButton from "@/layout/UserNavbarButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -21,12 +20,11 @@ type Props = {
 };
 const MainAppLayout = ({ children }: Props) => {
   const [openMenu, setOpenMenu] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-  const { data: balance, isLoading: isBalanceLoading } = useWalletBalance();
+  // const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // useEffect(() => {
+  //   setIsClient(true);
+  // }, []);
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
