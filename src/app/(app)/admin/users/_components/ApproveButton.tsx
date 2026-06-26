@@ -1,10 +1,9 @@
 import { ServerCall } from "@/types/server";
 import { User } from "@/types/user";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React from "react";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { toast } from "react-toastify";
 
 type Props = {
@@ -30,7 +29,7 @@ const ApproveButton = ({ userId, isApproved }: Props) => {
         onError: () => {
           toast.error("خطا در عملیات");
         },
-      }
+      },
     );
   }
   return (
@@ -42,9 +41,9 @@ const ApproveButton = ({ userId, isApproved }: Props) => {
         {isPending ? (
           <CircularProgress size={16} />
         ) : isApproved ? (
-          <PersonRemoveIcon />
+          <HighlightOffIcon />
         ) : (
-          <PersonAddIcon />
+          <VerifiedIcon />
         )}
       </IconButton>
     </Tooltip>

@@ -114,7 +114,7 @@ const MainAppLayout = ({ children }: Props) => {
         dir="ltr"
       >
         <Typography variant="caption" textAlign="center" className="w-full">
-          © 2025 OUR_Company. All rights reserved.
+          © 2026 OUR_Company. All rights reserved.
         </Typography>
       </Box>
     </div>
