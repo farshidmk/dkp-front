@@ -5,16 +5,14 @@ import convertGridQueryToApiFilterParam, {
   toQueryString,
 } from "@/services/convertGridQueryToApiFilterParam";
 import { AppGridColDef } from "@/types/data-grid";
-import { UserInfo } from "@/types/user";
-import { Chip, Container, IconButton, Tooltip } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import React, { useMemo, useState } from "react";
-import ApproveButton from "./ApproveButton";
-import EditIcon from "@mui/icons-material/Edit";
-import Link from "next/link";
-import FilterUsers from "./FilterUsers";
 import { PaginatedServerResponse } from "@/types/server";
+import { UserInfo } from "@/types/user";
+import { Chip, Container, Tooltip } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
 import { UserFilterItems } from "../users.type";
+import ApproveButton from "./ApproveButton";
+import FilterUsers from "./FilterUsers";
 import ViewUserProfileButton from "./ViewUserProfileButton";
 
 const UsersGrid = () => {

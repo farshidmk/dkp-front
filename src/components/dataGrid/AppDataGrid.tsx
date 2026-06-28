@@ -18,11 +18,11 @@ interface Props<T extends GridValidRowModel> {
   loading?: boolean;
   totalRows?: number;
 
-  paginationModel: GridPaginationModel;
-  onPaginationModelChange: (model: GridPaginationModel) => void;
+  paginationModel?: GridPaginationModel;
+  onPaginationModelChange?: (model: GridPaginationModel) => void;
 
-  sortModel: GridSortModel;
-  onSortModelChange: (model: GridSortModel) => void;
+  sortModel?: GridSortModel;
+  onSortModelChange?: (model: GridSortModel) => void;
 
   gridProps?: Partial<DataGridProps>;
 }

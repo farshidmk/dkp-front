@@ -1,79 +1,23 @@
+import { AppDataGrid } from "@/components/dataGrid/AppDataGrid";
 import { Warranty } from "@/types/warranty";
-import {
-  GridRowsProp,
-  GridRowModesModel,
-  GridRowModes,
-  DataGrid,
-  GridColDef,
-  GridActionsCellItem,
-  GridEventListener,
-  GridRowId,
-  GridRowModel,
-  GridRowEditStopReasons,
-  GridSlotProps,
-  Toolbar,
-  ToolbarButton,
-} from "@mui/x-data-grid";
-import React from "react";
-import { Tooltip, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
+import { IconButton, Typography } from "@mui/material";
+import { GridColDef } from "@mui/x-data-grid";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import EditWarrantyModal from "./EditWarrantyModal";
 
-type Props = {
-  warranties: Warranty[];
-};
-
-const WarrantyGrid = ({ warranties }: Props) => {
-  const [rows, setRows] = React.useState(warranties);
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {}
-  );
-
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
-    params,
-    event
-  ) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
-
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows.find((row) => row.id === id);
-    // if (editedRow!.) {
-    //   setRows(rows.filter((row) => row.id !== id));
-    // }
-  };
-
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    // setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
-
-  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-    setRowModesModel(newRowModesModel);
-  };
+const WarrantyGrid = () => {
+  const [selectedWarranty, setSelectedWarranty] = useState<
+    Warranty | undefined
+  >(undefined);
+  const { data: warranties, isFetching } = useQuery<
+    Warranty[],
+    Error,
+    Warranty[]
+  >({
+    queryKey: ["warranties"],
+  });
 
   const columns: GridColDef<Warranty>[] = [
     {
@@ -135,80 +79,41 @@ const WarrantyGrid = ({ warranties }: Props) => {
       headerName: "عملیات",
       type: "actions",
       ...DEFAULT_GRID_OPTIONS,
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              key={"save" + id}
-              icon={<SaveIcon />}
-              label="Save"
-              material={{
-                sx: {
-                  color: "primary.main",
-                },
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              key={`cancel-${id}`}
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
-          <GridActionsCellItem
-            key={`edit-${id}`}
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            key={`delete-${id}`}
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
+      renderCell: (params) => {
+        const warranty = params.row as Warranty;
+        return (
+          <div className="flex items-center justify-center gap-1.5">
+            <IconButton
+              color="primary"
+              onClick={() => setSelectedWarranty(warranty)}
+            >
+              <EditIcon />
+            </IconButton>
+          </div>
+        );
       },
     },
   ];
 
   return (
-    <DataGrid
-      rows={warranties || []}
-      columns={columns}
-      disableRowSelectionOnClick
-      autosizeOnMount
-      autoPageSize
-      pagination={undefined}
-      hideFooterPagination
-      hideFooter
-      localeText={{
-        noRowsLabel: "تراکنش در انتظار تایید موجود نیست",
-      }}
-      rowModesModel={rowModesModel}
-      onRowModesModelChange={handleRowModesModelChange}
-      onRowEditStop={handleRowEditStop}
-      // processRowUpdate={processRowUpdate}
-      slots={{ toolbar: () => <h1>test</h1> }}
-      slotProps={
-        {
-          //   toolbar: { setRows, setRowModesModel, },
-          //   toolbar: { se },
-        }
-      }
-      showToolbar
-    />
+    <>
+      {selectedWarranty && (
+        <EditWarrantyModal
+          open={Boolean(selectedWarranty)}
+          warranty={selectedWarranty}
+          handleClose={() => setSelectedWarranty(undefined)}
+        />
+      )}
+      <AppDataGrid
+        rows={warranties || []}
+        columns={columns}
+        loading={isFetching}
+        gridProps={{
+          getRowId: (row: Warranty) => row.id!,
+          paginationMode: "client",
+        }}
+      />
+    </>
   );
 };
 
@@ -222,29 +127,3 @@ const DEFAULT_GRID_OPTIONS: Partial<GridColDef> = {
   flex: 1,
   editable: true,
 };
-
-// function EditToolbar(props: GridSlotProps["toolbar"]) {
-//   const { setRows, setRowModesModel } = props;
-
-//   const handleClick = () => {
-//     const id = randomId();
-//     setRows((oldRows) => [
-//       ...oldRows,
-//       { id, name: "", age: "", role: "", isNew: true },
-//     ]);
-//     setRowModesModel((oldModel) => ({
-//       ...oldModel,
-//       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-//     }));
-//   };
-
-//   return (
-//     <Toolbar>
-//       <Tooltip title="اضافه کردن گارنتی">
-//         <ToolbarButton onClick={handleClick}>
-//           <AddIcon fontSize="small" />
-//         </ToolbarButton>
-//       </Tooltip>
-//     </Toolbar>
-//   );
-// }
