@@ -8,6 +8,11 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OrderSchema, orderSchemaValidation } from "../order.validation";
+import { useMutation } from "@tanstack/react-query";
+import { CreateReceipt, OrderItem } from "@/types/order";
+import { ServerCall } from "@/types/server";
+import PaymentMethod from "./PaymentMethod";
+import useGetWallet from "@/hooks/useGetWallet";
 
 export const DEFAULT_ORDER_ITEM = {
   dkp: "",
@@ -20,6 +25,10 @@ export const DEFAULT_ORDER_ITEM = {
 };
 
 const OrderForm = () => {
+  const { data: wallet } = useGetWallet();
+  const { mutate } = useMutation<OrderItem, Error, ServerCall<CreateReceipt>>(
+    {},
+  );
   const methods = useForm<OrderSchema>({
     defaultValues: {
       payment_method: "wallet",
@@ -38,10 +47,29 @@ const OrderForm = () => {
   });
 
   function onSubmit(values: OrderSchema) {
-    //TODO: check balance in wallet and if it's enough continue
-
-    console.log({ values });
+    const items = values.items.map((item) => ({
+      dkp: item.dkp,
+      quantity: item.quantity,
+      serial: item.serial,
+    }));
+    mutate({
+      url: "orders",
+      method: "POST",
+      data: {
+        payment_method: "wallet",
+        items,
+      },
+    });
   }
+  const receiptItems = methods.watch("items");
+  const totalPrice =
+    receiptItems?.reduce(
+      (total, item) => total + item.unit_price * item.quantity,
+      0,
+    ) ?? 0;
+  const isOrderButtonEnabled =
+    receiptItems.filter((item) => Boolean(item.dkp)).length > 0 &&
+    totalPrice / 10 <= Number(wallet?.balance ?? 0);
 
   return (
     <Container maxWidth={"xl"}>
@@ -66,6 +94,7 @@ const OrderForm = () => {
                 ...DEFAULT_ORDER_ITEM,
               })
             }
+            sx={{ mb: 1 }}
           >
             اضافه کردن محصول
           </Button>
@@ -75,6 +104,12 @@ const OrderForm = () => {
               {errors.items?.message}
             </Alert>
           )}
+
+          <PaymentMethod
+            control={control}
+            totalPrice={totalPrice}
+            walletBalance={Number(wallet?.balance ?? 0)}
+          />
           <div className="w-full flex items-center justify-center mt-6">
             <Button
               variant="contained"
@@ -82,6 +117,7 @@ const OrderForm = () => {
               endIcon={<CheckCircleIcon />}
               type="submit"
               className="w-60"
+              disabled={!isOrderButtonEnabled}
             >
               ایجاد فاکتور
             </Button>

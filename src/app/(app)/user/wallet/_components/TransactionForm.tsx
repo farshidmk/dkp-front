@@ -45,7 +45,7 @@ const TransactionForm = () => {
                       <InputLabel>نوع تراکنش</InputLabel>
                       <Select {...field} label="نوع تراکنش">
                         <MenuItem value={TransactionType.CHARGE}>شارژ</MenuItem>
-                        <MenuItem value={TransactionType.WITHDRAW}>
+                        <MenuItem value={TransactionType.WITHDRAW} disabled>
                           برداشت
                         </MenuItem>
                       </Select>
@@ -70,7 +70,10 @@ const TransactionForm = () => {
                       label="مبلغ (تومان)"
                       type="number"
                       error={Boolean(errors.amount)}
-                      helperText={errors.amount?.message}
+                      helperText={
+                        errors.amount?.message ??
+                        `${Number(field.value).toLocaleString("fa")} تومان`
+                      }
                     />
                   )}
                 />

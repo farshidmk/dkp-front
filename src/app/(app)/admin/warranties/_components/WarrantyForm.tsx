@@ -170,7 +170,7 @@ const WarrantyForm = ({ warranty, onSuccess }: Props) => {
                   error={Boolean(errors?.["warranty_price"]?.message)}
                   helperText={
                     errors?.["warranty_price"]?.message ??
-                    `${Number(watch("warranty_price")).toLocaleString("fa")} ريال`
+                    `${Number(watch("warranty_price")).toLocaleString("fa")} ${watch("is_percentage") ? "%" : "ريال"}`
                   }
                 />
               );

@@ -39,3 +39,14 @@ export type DkpResponse = {
     };
   };
 };
+
+export type CreateReceipt = {
+  payment_method: "wallet";
+  items: CreateReceiptItem[];
+};
+
+export type CreateReceiptItem = {
+  dkp: string;
+  quantity: number;
+  serial: string;
+};

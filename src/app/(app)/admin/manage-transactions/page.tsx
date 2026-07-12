@@ -52,7 +52,7 @@ const AdminManageTransactionsPage = () => {
       renderCell: (params) => getTransactionTypeLabel(params.value),
     },
     {
-      field: "order_id",
+      field: "tracking_number",
       headerName: "کد پیگیری",
       width: 150,
     },
