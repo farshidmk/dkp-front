@@ -1,6 +1,5 @@
 import { useUserInfo } from "@/hooks/useUserInfo";
 import { UserRole } from "@/types/user";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
   alpha,
   Box,
@@ -10,6 +9,7 @@ import {
   List,
   ListItem,
   ListItemButton,
+  ListItemButtonBaseProps,
   ListItemIcon,
   ListItemText,
   Paper,
@@ -18,6 +18,7 @@ import { ADMIN_MENU, USER_MENU } from "./MENU";
 import Link from "next/link";
 import Image from "next/image";
 import CloseIcon from "@mui/icons-material/Close";
+import { usePathname } from "next/navigation";
 
 type Props = {
   open: boolean;
@@ -27,12 +28,28 @@ type Props = {
 const DrawerMenu = ({ open, setOpen }: Props) => {
   const { role } = useUserInfo();
   const isAdmin = role === UserRole.ADMIN;
+
+  const pathname = usePathname();
+  const isActive = (path: string) => pathname === path;
+
+  const menuItemSx: ListItemButtonBaseProps["sx"] = {
+    borderRadius: 2,
+    mx: 1,
+    "&.Mui-selected": {
+      bgcolor: (theme) => alpha(theme.palette.info.light, 0.25),
+    },
+    "&.Mui-selected:hover": {
+      bgcolor: (theme) => alpha(theme.palette.info.light, 0.35),
+    },
+  };
+
   return (
     <Drawer open={open} onClose={() => setOpen(false)} anchor="left">
-      <Box sx={{ width: "100%", maxWidth: "400px" }} role="presentation">
+      <Box sx={{ width: 320 }} role="presentation">
         <Paper
           sx={{
             py: 1,
+            px: 2,
             background: (t) => alpha(t.palette.primary.main, 0.2),
             display: "flex",
             alignItems: "center",
@@ -41,10 +58,11 @@ const DrawerMenu = ({ open, setOpen }: Props) => {
         >
           <Image
             alt="دیجی تعمیر"
-            src={"/assets/images/mainlogo.png"}
+            src="/assets/images/mainlogo.png"
             width={100}
             height={40}
           />
+
           <IconButton onClick={() => setOpen(false)} color="secondary">
             <CloseIcon />
           </IconButton>
@@ -54,29 +72,39 @@ const DrawerMenu = ({ open, setOpen }: Props) => {
           <>
             <List>
               {ADMIN_MENU.map((menu) => (
-                <Link href={menu.path} key={menu.path}>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>{menu.icon}</ListItemIcon>
-                      <ListItemText primary={menu.title} />
-                    </ListItemButton>
-                  </ListItem>
-                </Link>
+                <ListItem key={menu.path} disablePadding>
+                  <ListItemButton
+                    component={Link}
+                    href={menu.path}
+                    selected={isActive(menu.path)}
+                    onClick={() => setOpen(false)}
+                    sx={menuItemSx}
+                  >
+                    <ListItemIcon>{menu.icon}</ListItemIcon>
+                    <ListItemText primary={menu.title} />
+                  </ListItemButton>
+                </ListItem>
               ))}
             </List>
+
             <Divider />
           </>
         )}
+
         <List>
           {USER_MENU.map((menu) => (
-            <Link href={menu.path} key={menu.path}>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>{menu.icon}</ListItemIcon>
-                  <ListItemText primary={menu.title} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
+            <ListItem key={menu.path} disablePadding>
+              <ListItemButton
+                component={Link}
+                href={menu.path}
+                selected={isActive(menu.path)}
+                onClick={() => setOpen(false)}
+                sx={menuItemSx}
+              >
+                <ListItemIcon>{menu.icon}</ListItemIcon>
+                <ListItemText primary={menu.title} />
+              </ListItemButton>
+            </ListItem>
           ))}
         </List>
       </Box>
