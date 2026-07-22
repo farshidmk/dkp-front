@@ -50,3 +50,16 @@ export type CreateReceiptItem = {
   quantity: number;
   serial: string;
 };
+
+export enum OrderStatus {
+  PENDING = "pending",
+  PAID = "paid",
+  FAILED = "failed",
+  CANCELED = "canceled",
+}
+
+export type CreateReceiptResponse = {
+  id: number;
+  status: OrderStatus;
+  date: string;
+};

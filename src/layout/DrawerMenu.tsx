@@ -63,7 +63,7 @@ const DrawerMenu = ({ open, setOpen }: Props) => {
             height={40}
           />
 
-          <IconButton onClick={() => setOpen(false)} color="secondary">
+          <IconButton onClick={() => setOpen(false)} color="warning">
             <CloseIcon />
           </IconButton>
         </Paper>

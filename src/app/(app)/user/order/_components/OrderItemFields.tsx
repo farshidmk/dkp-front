@@ -20,6 +20,7 @@ type Props = {
 };
 const OrderItemFields = ({ index }: Props) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isDkpUpdated, setIsDkpUpdated] = useState<boolean>(false);
   const {
     control,
     formState: { errors },
@@ -113,12 +114,18 @@ const OrderItemFields = ({ index }: Props) => {
               label={"کد محصول(DKP)"}
               onChange={(e) => {
                 if (isOnlyNumbers(e.target.value)) {
+                  setIsDkpUpdated(true);
                   update(index, { ...item, dkp: e.target.value });
                 }
               }}
               placeholder="کد محصول"
               value={item.dkp}
-              onBlur={(e) => getItem(e.target.value)}
+              onBlur={(e) => {
+                if (isDkpUpdated) {
+                  getItem(e.target.value);
+                  setIsDkpUpdated(false);
+                }
+              }}
               fullWidth
               error={Boolean(error?.dkp?.message)}
               helperText={error?.dkp?.message}

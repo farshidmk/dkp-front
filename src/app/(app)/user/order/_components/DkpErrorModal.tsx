@@ -1,17 +1,13 @@
+import ErrorIcon from "@mui/icons-material/Error";
 import {
-  Alert,
   alpha,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
-import ErrorIcon from "@mui/icons-material/Error";
 
 type Props = {
   message?: string;
