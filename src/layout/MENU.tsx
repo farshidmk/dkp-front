@@ -6,6 +6,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SecurityIcon from "@mui/icons-material/Security";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import ReceiptIcon from "@mui/icons-material/Receipt";
 
 type MenuType = {
   title: string;
@@ -29,6 +30,11 @@ export const ADMIN_MENU: MenuType[] = [
     title: "مدیریت تراکنش‌ها",
     icon: <PendingActionsIcon />,
     path: "/admin/manage-transactions",
+  },
+  {
+    title: "مدیریت سفارشات",
+    icon: <ReceiptIcon />,
+    path: "/admin/manage-orders",
   },
   {
     title: "گارانتی ها",

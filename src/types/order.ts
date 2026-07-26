@@ -56,10 +56,44 @@ export enum OrderStatus {
   PAID = "paid",
   FAILED = "failed",
   CANCELED = "canceled",
+  COMPLETED = "completed",
 }
 
 export type CreateReceiptResponse = {
   id: number;
   status: OrderStatus;
   date: string;
+};
+
+export type OrderGridData = {
+  id: number;
+  total_price: number;
+  tracking_code: number;
+  status: OrderStatus;
+  payment_method: "wallet";
+  created_at: Date;
+  user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  };
+  order_items: OrderItemInAllOrder[];
+};
+
+export type OrderSearchItems = {
+  status?: OrderStatus;
+  trackingCode?: string;
+  creatorName?: string;
+};
+
+export type OrderItemInAllOrder = {
+  id: number;
+  order_id: number;
+  title: string;
+  dkp: string;
+  quantity: number;
+  image_url: string;
+  serial: string;
+  unit_price: string;
+  warrantyPrice: number;
 };
