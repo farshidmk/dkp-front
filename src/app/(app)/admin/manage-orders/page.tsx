@@ -13,7 +13,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import PaidIcon from "@mui/icons-material/Paid";
 import PendingRoundedIcon from "@mui/icons-material/PendingRounded";
-import { Chip, Container, Tooltip } from "@mui/material";
+import { Box, Chip, Container, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
 
@@ -115,18 +115,22 @@ const ManageOrdersPage = () => {
           return (
             <Tooltip
               title={
-                <ul className="disk">
-                  {orderItems.map((item, i) => (
-                    <li key={item.dkp}>
-                      {(i + 1).toLocaleString("fa")}
-                      {"- "}
-                      {item.title}
-                    </li>
+                <ul className="list-disc">
+                  {orderItems.map((item) => (
+                    <li key={item.dkp}>{item.title}</li>
                   ))}
                 </ul>
               }
             >
-              <span>{orderItems.length.toLocaleString("fa")}</span>
+              <Box
+                component="div"
+                sx={{ background: (t) => t.palette.info.light }}
+                className="flex items-center rounded-full p-3 w-10 h-10"
+              >
+                <Typography variant="body1">
+                  {orderItems.length.toLocaleString("fa")}
+                </Typography>
+              </Box>
             </Tooltip>
           );
         },
