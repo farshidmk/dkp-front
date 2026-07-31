@@ -8,14 +8,12 @@ import convertGridQueryToApiFilterParam, {
 import { AppGridColDef } from "@/types/data-grid";
 import { OrderGridData, OrderSearchItems, OrderStatus } from "@/types/order";
 import { PaginatedServerResponse } from "@/types/server";
-import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-import DoneAllIcon from "@mui/icons-material/DoneAll";
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import PaidIcon from "@mui/icons-material/Paid";
-import PendingRoundedIcon from "@mui/icons-material/PendingRounded";
+
 import { Box, Chip, Container, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
+import OrderModalButton from "./_components/OrderModalButton";
+import { orderStatusConfig } from "@/shared/orderStatusStyle";
 
 const ManageOrdersPage = () => {
   const {
@@ -115,17 +113,22 @@ const ManageOrdersPage = () => {
           return (
             <Tooltip
               title={
-                <ul className="list-disc">
-                  {orderItems.map((item) => (
-                    <li key={item.dkp}>{item.title}</li>
-                  ))}
-                </ul>
+                <div className="px-2">
+                  <ul className="list-disc">
+                    {orderItems.map((item) => (
+                      <li key={item.dkp}>{item.title}</li>
+                    ))}
+                  </ul>
+                </div>
               }
             >
               <Box
                 component="div"
-                sx={{ background: (t) => t.palette.info.light }}
-                className="flex items-center rounded-full p-3 w-10 h-10"
+                sx={{
+                  border: (t) => `1px solid ${t.palette.info.light}`,
+                  color: (t) => t.palette.info.dark,
+                }}
+                className="flex items-center rounded-full p-3 w-10 h-10 justify-center"
               >
                 <Typography variant="body1">
                   {orderItems.length.toLocaleString("fa")}
@@ -142,9 +145,13 @@ const ManageOrdersPage = () => {
         filterable: false,
         sortable: false,
         renderCell: (params) => {
-          const user = params.row as OrderGridData;
+          const order = params.row as OrderGridData;
 
-          return <div className="flex items-center gap-2"></div>;
+          return (
+            <div className="flex items-center gap-2">
+              <OrderModalButton order={order} />
+            </div>
+          );
         },
       },
     ],
@@ -177,38 +184,3 @@ const ManageOrdersPage = () => {
 };
 
 export default ManageOrdersPage;
-
-const orderStatusConfig: Record<
-  OrderStatus,
-  {
-    label: string;
-    color: "success" | "warning" | "error" | "default";
-    icon: React.ReactElement;
-  }
-> = {
-  [OrderStatus.PENDING]: {
-    label: "در انتظار پرداخت",
-    color: "warning",
-    icon: <PendingRoundedIcon fontSize="small" />,
-  },
-  [OrderStatus.PAID]: {
-    label: "پرداخت شده",
-    color: "success",
-    icon: <PaidIcon fontSize="small" />,
-  },
-  [OrderStatus.FAILED]: {
-    label: "پرداخت ناموفق",
-    color: "error",
-    icon: <HighlightOffRoundedIcon fontSize="small" />,
-  },
-  [OrderStatus.CANCELED]: {
-    label: "لغو شده",
-    color: "default",
-    icon: <CancelRoundedIcon fontSize="small" />,
-  },
-  [OrderStatus.COMPLETED]: {
-    label: "تکمیل شده",
-    color: "success",
-    icon: <DoneAllIcon fontSize="small" />,
-  },
-};
