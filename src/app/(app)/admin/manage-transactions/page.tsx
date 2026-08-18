@@ -43,7 +43,7 @@ const AdminManageTransactionsPage = () => {
       field: "amount",
       headerName: "مبلغ",
       width: 120,
-      renderCell: (params) => `${formatPersianAmount(params.value)} تومان`,
+      renderCell: (params) => `${formatPersianAmount(params.value)} ریال`,
     },
     {
       field: "type",

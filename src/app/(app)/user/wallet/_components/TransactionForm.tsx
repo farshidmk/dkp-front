@@ -67,12 +67,12 @@ const TransactionForm = () => {
                     <TextField
                       {...field}
                       fullWidth
-                      label="مبلغ (تومان)"
+                      label="مبلغ (ریال)"
                       type="number"
                       error={Boolean(errors.amount)}
                       helperText={
                         errors.amount?.message ??
-                        `${Number(field.value).toLocaleString("fa")} تومان`
+                        `${Number(field.value).toLocaleString("fa")} ریال`
                       }
                     />
                   )}

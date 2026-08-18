@@ -33,11 +33,13 @@ const WalletBalanceCard = ({ balance, isLoading }: WalletBalanceCardProps) => {
             <Skeleton variant="text" width="60%" height={60} />
           ) : (
             <Typography variant="h3" fontWeight="bold">
-              {balance?.balance ? parseFloat(balance.balance).toLocaleString("fa") : "0"}
+              {balance?.balance
+                ? parseFloat(balance.balance).toLocaleString("fa")
+                : "0"}
             </Typography>
           )}
           <Typography variant="body1" sx={{ opacity: 0.9 }}>
-            تومان
+            ریال
           </Typography>
         </Box>
 
@@ -46,10 +48,9 @@ const WalletBalanceCard = ({ balance, isLoading }: WalletBalanceCardProps) => {
           sx={{ opacity: 0.7, mt: 1, display: "block" }}
         >
           آخرین بروزرسانی:{" "}
-          {balance?.updated_at 
+          {balance?.updated_at
             ? new Date(balance.updated_at).toLocaleString("fa")
-            : "نامشخص"
-          }
+            : "نامشخص"}
         </Typography>
       </CardContent>
     </Card>

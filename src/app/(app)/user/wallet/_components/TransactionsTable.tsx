@@ -20,7 +20,7 @@ const TransactionsTable = () => {
 
   const { data, status } = useWalletTransactions(
     paginationModel.page,
-    paginationModel.pageSize
+    paginationModel.pageSize,
   );
 
   const getStatusColor = (status: TransactionStatus) => {
@@ -54,7 +54,7 @@ const TransactionsTable = () => {
       field: "amount",
       headerName: "مبلغ",
       width: 120,
-      renderCell: (params) => `${formatPersianAmount(params.value)} تومان`,
+      renderCell: (params) => `${formatPersianAmount(params.value)} ریال`,
     },
     {
       field: "status",

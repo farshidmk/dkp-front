@@ -10,6 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import Link from "next/link";
 import { Control, Controller } from "react-hook-form";
 
 interface Props {
@@ -18,15 +19,12 @@ interface Props {
   walletBalance: number;
 
   totalPrice: number;
-
-  // onChargeWallet: () => void;
 }
 
 export default function PaymentMethod({
   control,
   walletBalance,
   totalPrice,
-  // onChargeWallet,
 }: Props) {
   const enoughBalance = walletBalance >= totalPrice;
 
@@ -77,7 +75,7 @@ export default function PaymentMethod({
                     </Typography>
 
                     <Typography variant="caption" color="text.secondary">
-                      موجودی: {walletBalance.toLocaleString("fa-IR")} تومان
+                      موجودی: {walletBalance.toLocaleString("fa-IR")} ریال
                     </Typography>
                   </Box>
                 </Stack>
@@ -99,17 +97,19 @@ export default function PaymentMethod({
                     موجودی کیف پول کافی نیست.
                   </Typography>
 
-                  <Button
-                    size="small"
-                    variant="contained"
-                    // onClick={onChargeWallet}
-                    sx={{
-                      borderRadius: 2,
-                      minWidth: 100,
-                    }}
-                  >
-                    شارژ کیف پول
-                  </Button>
+                  <Link href={"/user/wallet"}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      // onClick={onChargeWallet}
+                      sx={{
+                        borderRadius: 2,
+                        minWidth: 100,
+                      }}
+                    >
+                      شارژ کیف پول
+                    </Button>
+                  </Link>
                 </Stack>
               )}
             </Stack>
