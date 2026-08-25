@@ -15,7 +15,11 @@ type MenuType = {
 };
 export const USER_MENU: MenuType[] = [
   { title: "سفارش", icon: <ReceiptLongIcon />, path: "/user/order" },
-  { title: "تاریخجه سفارشات", icon: <HistoryIcon />, path: "/user/history" },
+  {
+    title: "تاریخچه سفارشات",
+    icon: <HistoryIcon />,
+    path: "/user/order-history",
+  },
   {
     title: "کیف پول",
     icon: <AccountBalanceWalletIcon />,
