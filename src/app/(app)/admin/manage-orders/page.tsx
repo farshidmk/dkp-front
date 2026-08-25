@@ -12,8 +12,10 @@ import { PaginatedServerResponse } from "@/types/server";
 import { Box, Chip, Container, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
-import OrderModalButton from "./_components/OrderModalButton";
+import ViewOrderModalButton from "./_components/ViewOrderModalButton";
+import FilterOrders from "./_components/FilterOrders";
 import { orderStatusConfig } from "@/shared/orderStatusStyle";
+import OrderStatusButton from "./_components/OrderStatusButton";
 
 const ManageOrdersPage = () => {
   const {
@@ -77,6 +79,13 @@ const ManageOrdersPage = () => {
           const createdDate = params.value as OrderGridData["created_at"];
           return new Date(createdDate).toLocaleString("fa");
         },
+      },
+      {
+        field: "tracking_code",
+        headerName: "کد پیگیری",
+        flex: 1,
+        filterable: false,
+        sortable: false,
       },
       {
         field: "total_price",
@@ -149,7 +158,8 @@ const ManageOrdersPage = () => {
 
           return (
             <div className="flex items-center gap-2">
-              <OrderModalButton order={order} />
+              <ViewOrderModalButton order={order} />
+              <OrderStatusButton order={order} />
             </div>
           );
         },
@@ -161,6 +171,7 @@ const ManageOrdersPage = () => {
   return (
     <div>
       <div className="h-full flex flex-col gap-1">
+        <FilterOrders setFilter={setFilter} isFetching={isFetching} />
         <Container maxWidth="xl" sx={{ flex: 1, overflow: "auto" }}>
           <StatusHandler status={status} refetch={refetch} skeletonHeight={500}>
             <AppDataGrid

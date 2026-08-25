@@ -22,17 +22,7 @@ type Props = {
   order: OrderGridData;
 };
 
-const OrderModalButton = ({ order }: Props) => {
-  const subtotal = order.order_items.reduce(
-    (sum, item) => sum + Number(item.unit_price) * item.quantity,
-    0,
-  );
-
-  const warrantyTotal = order.order_items.reduce(
-    (sum, item) => sum + item.warrantyPrice,
-    0,
-  );
-
+const ViewOrderModalButton = ({ order }: Props) => {
   const [showModal, setShowModal] = useState(false);
   const status = orderStatusConfig[order.status as OrderStatus];
   return (
@@ -212,4 +202,4 @@ const OrderModalButton = ({ order }: Props) => {
   );
 };
 
-export default OrderModalButton;
+export default ViewOrderModalButton;
