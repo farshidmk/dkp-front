@@ -30,3 +30,21 @@ export function errorHasMessage(e: unknown): e is { message: string } {
     typeof (e as any).message === "string"
   );
 }
+
+/**
+ * Determines whether a given error is a rate-limit (HTTP 429) error
+ * returned by the backend, e.g. the login lockout response.
+ *
+ * @param {unknown} e - The value to check, typically a React Query mutation error.
+ * @returns {e is { statusCode: number; message: string }} `true` if `e` has `statusCode === 429`.
+ */
+export function isRateLimitError(
+  e: unknown
+): e is { statusCode: number; message: string } {
+  return (
+    typeof e === "object" &&
+    e !== null &&
+    "statusCode" in e &&
+    (e as any).statusCode === 429
+  );
+}

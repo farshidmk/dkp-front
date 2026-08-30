@@ -3,7 +3,7 @@
 import RenderFormItem from "@/components/formItems/RenderFormItem";
 import LoginIcon from "@mui/icons-material/Login";
 import { FormFieldInput } from "@/types/renderFormItem";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { LoginFormItems, LoginResponse } from "../login-types";
@@ -12,6 +12,8 @@ import { ServerCall } from "@/types/server";
 import ShowErrors from "@/components/errors/ShowErrors";
 import Cookies from "js-cookie";
 import { UserRole } from "@/types/user";
+import { isRateLimitError } from "@/services/typeGuards";
+
 
 const PasswordLoginForm = () => {
   const router = useRouter();
@@ -30,6 +32,7 @@ const PasswordLoginForm = () => {
       mobile: "",
     },
   });
+  
   async function onSubmitHandler(data: LoginFormItems) {
     mutate(
       {
@@ -67,7 +70,15 @@ const PasswordLoginForm = () => {
           }}
         />
       ))}
-      {Boolean(error?.message) && <ShowErrors errors={error!.message!} />}
+
+      {isRateLimitError(error) ? (
+        <Alert severity="warning" sx={{ mt: 1 }}>
+          {error.message}
+        </Alert>
+      ) : (
+        Boolean(error?.message) && <ShowErrors errors={error!.message!} />
+      )}
+
       <Button
         type="submit"
         fullWidth
