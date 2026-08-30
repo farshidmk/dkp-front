@@ -14,6 +14,9 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useUserInfo } from "@/hooks/useUserInfo";
+import { UserRole } from "@/types/user";
 
 type Props = {
   children: React.ReactNode;
@@ -25,6 +28,16 @@ const MainAppLayout = ({ children }: Props) => {
   // useEffect(() => {
   //   setIsClient(true);
   // }, []);
+
+  const { role } = useUserInfo();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (pathname.startsWith("/admin") && role !== UserRole.ADMIN) {
+      router.replace("/user");
+    }
+  }, [pathname, role, router]);
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
