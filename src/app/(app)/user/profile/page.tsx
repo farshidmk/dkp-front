@@ -4,45 +4,31 @@ import { Container } from "@mui/material";
 import React, { useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import KeyIcon from "@mui/icons-material/Key";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+
 import CustomTabPanel from "@/components/customTabPanel/CustomTabPanel";
 import ProfileForm from "./_components/ProfileForm";
 import ChangePasswordForm from "./_components/ChangePasswordForm";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import KeyIcon from "@mui/icons-material/Key";
+import WalletSummaryTab from "./_components/WalletSummaryTab";
+
 
 enum ProfileTabs {
   ChangePassword = "change-password",
   Profile = "profile",
+  Wallet = "wallet",
 }
 
 const UserProfilePage = () => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>(ProfileTabs.Profile);
 
   return (
-    <Container
-      maxWidth="lg"
-      className="border p-2 h-full"
-      sx={{ borderColor: (t) => t.palette.divider, borderRadius: 2 }}
-    >
-      <Tabs
-        value={activeTab}
-        onChange={(e, value) => {
-          console.log({ e, value });
-          setActiveTab(value);
-        }}
-      >
-        <Tab
-          label="اطلاعات کاربری"
-          value={ProfileTabs.Profile}
-          icon={<AssignmentIndIcon />}
-          iconPosition="end"
-        />
-        <Tab
-          label="تغییر رمز عبور"
-          value={ProfileTabs.ChangePassword}
-          icon={<KeyIcon />}
-          iconPosition="end"
-        />
+    <Container maxWidth="lg" className="border p-2 h-full" sx={{ borderColor: (t) => t.palette.divider, borderRadius: 2 }}>
+      <Tabs value={activeTab} onChange={(e, value) => setActiveTab(value)}>
+        <Tab label="اطلاعات کاربری" value={ProfileTabs.Profile} icon={<AssignmentIndIcon />} iconPosition="end" />
+        <Tab label="تغییر رمز عبور" value={ProfileTabs.ChangePassword} icon={<KeyIcon />} iconPosition="end" />
+        <Tab label="کیف پول" value={ProfileTabs.Wallet} icon={<AccountBalanceWalletIcon />} iconPosition="end" />
       </Tabs>
 
       <CustomTabPanel activeTab={activeTab} value={ProfileTabs.Profile}>
@@ -50,6 +36,9 @@ const UserProfilePage = () => {
       </CustomTabPanel>
       <CustomTabPanel activeTab={activeTab} value={ProfileTabs.ChangePassword}>
         <ChangePasswordForm />
+      </CustomTabPanel>
+      <CustomTabPanel activeTab={activeTab} value={ProfileTabs.Wallet}>
+        <WalletSummaryTab />
       </CustomTabPanel>
     </Container>
   );

@@ -129,11 +129,10 @@ const UserNavbarButton = () => {
             fullWidth
             sx={{ justifyContent: "space-between" }}
             onClick={() => {
-              Cookies.remove("token", { path: "/" });
-              Cookies.remove("userInfo", { path: "/" });
-              handleClose();
-              router.push("/auth/login");
-            }}
+            Cookies.remove("userInfo", { path: "/" });
+            handleClose();
+            router.push("/auth/login");
+          }}
           >
             خروج
           </Button>
