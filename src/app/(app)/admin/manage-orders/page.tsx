@@ -12,7 +12,7 @@ import { PaginatedServerResponse } from "@/types/server";
 import { Box, Chip, Container, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
-import ViewOrderModalButton from "./_components/ViewOrderModalButton";
+import ViewOrderModalButton from "@/components/orders/ViewOrderModalButton";
 import FilterOrders from "./_components/FilterOrders";
 import { orderStatusConfig } from "@/shared/orderStatusStyle";
 import OrderStatusButton from "./_components/OrderStatusButton";

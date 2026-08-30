@@ -9,7 +9,7 @@ import convertGridQueryToApiFilterParam, {
 import { AppGridColDef } from "@/types/data-grid";
 import { OrderGridData, OrderSearchItems, OrderStatus } from "@/types/order";
 import { PaginatedServerResponse } from "@/types/server";
-import ViewOrderModalButton from "./ViewOrderModalButton";
+import ViewOrderModalButton from "@/components/orders/ViewOrderModalButton";
 import { orderStatusConfig } from "@/shared/orderStatusStyle";
 import { Box, Chip, Container, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";

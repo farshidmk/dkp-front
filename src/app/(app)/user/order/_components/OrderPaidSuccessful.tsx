@@ -68,7 +68,8 @@ const OrderPaidSuccessful = ({ open, order, handleClose }: Props) => {
             >
               خروج
             </Button>
-            <Link href={`/user/myOrder/${order?.id}`}>
+
+            <Link href={`/user/order-history/${order?.id}`}>
               <Button
                 variant="outlined"
                 color="primary"
