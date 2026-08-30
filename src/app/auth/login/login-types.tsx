@@ -6,6 +6,5 @@ export type LoginFormItems = {
 };
 
 export type LoginResponse = {
-  token: string;
   userInfo: User;
 };

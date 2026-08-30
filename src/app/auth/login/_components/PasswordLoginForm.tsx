@@ -39,11 +39,8 @@ const PasswordLoginForm = () => {
       },
       {
         onSuccess: (res) => {
-          Cookies.set("token", res.token, { expires: 1 });
           Cookies.set("userInfo", JSON.stringify(res.userInfo), { expires: 1 });
-          router.push(
-            res.userInfo.role === UserRole.ADMIN ? "/admin" : "/user"
-          );
+          router.push(res.userInfo.role === UserRole.ADMIN ? "/admin" : "/user");
         },
       }
     );
