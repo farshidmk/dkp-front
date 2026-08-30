@@ -118,9 +118,7 @@ const UsersGrid = () => {
           return (
             <div className="flex items-center gap-2">
               <ApproveButton isApproved={user.approved} userId={user.id} />
-              <ViewUserProfileButton
-                user={{ ...user.profile, mobile: user.mobile }}
-              />
+              <ViewUserProfileButton userId={user.id} /> 
             </div>
           );
         },
