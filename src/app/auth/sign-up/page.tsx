@@ -60,7 +60,7 @@ const LoginPage = () => {
           reset();
           router.push("/auth/login");
         },
-      }
+      },
     );
   }
 
@@ -140,6 +140,11 @@ export const SIGN_UP_FORM_ITEMS: FormFieldInput<SignUpFormItems>[] = [
     label: "نام",
   },
   {
+    name: "last_name",
+    inputType: "text",
+    label: "نام خانوادگی",
+  },
+  {
     name: "mobile",
     inputType: "text",
     label: "تلفن همراه",
@@ -154,11 +159,6 @@ export const SIGN_UP_FORM_ITEMS: FormFieldInput<SignUpFormItems>[] = [
     inputProps: {
       type: "password", // Explicitly set input type as password
     },
-  },
-  {
-    name: "last_name",
-    inputType: "text",
-    label: "نام خانوادگی",
   },
   {
     name: "national_code",
